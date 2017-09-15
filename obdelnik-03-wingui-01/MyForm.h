@@ -33,31 +33,53 @@ namespace obdelnik03wingui01 {
                 delete components;
             }
         }
-        private: System::Windows::Forms::Label^  label1;
+        private: System::Windows::Forms::Label^  lab_Size_height;
+        private: System::Windows::Forms::Label^  lab_Size_width;
         protected:
-        private: System::Windows::Forms::Label^  label2;
-        private: System::Windows::Forms::GroupBox^  groupBox1;
-        private: System::Windows::Forms::NumericUpDown^  numericUpDown2;
-        private: System::Windows::Forms::NumericUpDown^  numericUpDown1;
-        private: System::Windows::Forms::CheckBox^  checkBox1;
-        private: System::Windows::Forms::Label^  label4;
+
+        protected:
+
+        private: System::Windows::Forms::GroupBox^  grp_Size;
+        private: System::Windows::Forms::NumericUpDown^  num_Size_width;
+
+
+        private: System::Windows::Forms::NumericUpDown^  num_Size_height;
+        private: System::Windows::Forms::CheckBox^  ckbox_Size_lockRatio;
+        private: System::Windows::Forms::Label^  lab_Size_x;
+
+
+
 
 
 
         private: System::Windows::Forms::PictureBox^  pictureBox1;
-        private: System::Windows::Forms::Label^  label3;
-        private: System::Windows::Forms::GroupBox^  groupBox2;
-        private: System::Windows::Forms::Label^  label5;
 
-        private: System::Windows::Forms::NumericUpDown^  numericUpDown3;
-        private: System::Windows::Forms::Button^  button4;
+        private: System::Windows::Forms::GroupBox^  grp_Edit;
+        private: System::Windows::Forms::Label^  lab_Edit_manually;
+        private: System::Windows::Forms::NumericUpDown^  num_Edit_percent;
+        private: System::Windows::Forms::Button^  but_Edit_plus10;
+        private: System::Windows::Forms::Button^  but_Edit_fullFill;
 
-        private: System::Windows::Forms::Button^  button2;
-        private: System::Windows::Forms::Button^  button1;
-        private: System::Windows::Forms::Label^  label6;
-        private: System::Windows::Forms::Label^  label7;
-        private: System::Windows::Forms::Button^  button5;
-        private: System::Windows::Forms::Button^  button3;
+
+
+
+
+
+
+
+        private: System::Windows::Forms::Button^  but_Edit_fullEmpty;
+
+
+
+
+        private: System::Windows::Forms::Label^  lab_Edit_random;
+        private: System::Windows::Forms::Label^  lab_Edit_percent;
+        private: System::Windows::Forms::Button^  but_Edit_generate;
+        private: System::Windows::Forms::Button^  but_Edit_minus10;
+
+
+
+
 
 
         private:
@@ -73,123 +95,111 @@ namespace obdelnik03wingui01 {
         /// </summary>
         void InitializeComponent(void)
         {
-            this->label1 = (gcnew System::Windows::Forms::Label());
-            this->label2 = (gcnew System::Windows::Forms::Label());
-            this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
-            this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
-            this->label3 = (gcnew System::Windows::Forms::Label());
-            this->label4 = (gcnew System::Windows::Forms::Label());
-            this->numericUpDown2 = (gcnew System::Windows::Forms::NumericUpDown());
-            this->numericUpDown1 = (gcnew System::Windows::Forms::NumericUpDown());
+            this->lab_Size_height = (gcnew System::Windows::Forms::Label());
+            this->lab_Size_width = (gcnew System::Windows::Forms::Label());
+            this->grp_Size = (gcnew System::Windows::Forms::GroupBox());
+            this->ckbox_Size_lockRatio = (gcnew System::Windows::Forms::CheckBox());
+            this->lab_Size_x = (gcnew System::Windows::Forms::Label());
+            this->num_Size_width = (gcnew System::Windows::Forms::NumericUpDown());
+            this->num_Size_height = (gcnew System::Windows::Forms::NumericUpDown());
             this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
-            this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
-            this->label7 = (gcnew System::Windows::Forms::Label());
-            this->button5 = (gcnew System::Windows::Forms::Button());
-            this->button3 = (gcnew System::Windows::Forms::Button());
-            this->numericUpDown3 = (gcnew System::Windows::Forms::NumericUpDown());
-            this->button4 = (gcnew System::Windows::Forms::Button());
-            this->button2 = (gcnew System::Windows::Forms::Button());
-            this->button1 = (gcnew System::Windows::Forms::Button());
-            this->label6 = (gcnew System::Windows::Forms::Label());
-            this->label5 = (gcnew System::Windows::Forms::Label());
-            this->groupBox1->SuspendLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown2))->BeginInit();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
+            this->grp_Edit = (gcnew System::Windows::Forms::GroupBox());
+            this->lab_Edit_percent = (gcnew System::Windows::Forms::Label());
+            this->but_Edit_generate = (gcnew System::Windows::Forms::Button());
+            this->but_Edit_minus10 = (gcnew System::Windows::Forms::Button());
+            this->num_Edit_percent = (gcnew System::Windows::Forms::NumericUpDown());
+            this->but_Edit_plus10 = (gcnew System::Windows::Forms::Button());
+            this->but_Edit_fullFill = (gcnew System::Windows::Forms::Button());
+            this->but_Edit_fullEmpty = (gcnew System::Windows::Forms::Button());
+            this->lab_Edit_random = (gcnew System::Windows::Forms::Label());
+            this->lab_Edit_manually = (gcnew System::Windows::Forms::Label());
+            this->grp_Size->SuspendLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->num_Size_width))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->num_Size_height))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
-            this->groupBox2->SuspendLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown3))->BeginInit();
+            this->grp_Edit->SuspendLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->num_Edit_percent))->BeginInit();
             this->SuspendLayout();
             // 
-            // label1
+            // lab_Size_height
             // 
-            this->label1->AutoSize = true;
-            this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                                                              static_cast<System::Byte>(238)));
-            this->label1->Location = System::Drawing::Point(21, 21);
-            this->label1->Name = L"label1";
-            this->label1->Size = System::Drawing::Size(42, 13);
-            this->label1->TabIndex = 0;
-            this->label1->Text = L"height";
+            this->lab_Size_height->AutoSize = true;
+            this->lab_Size_height->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                                                                       static_cast<System::Byte>(238)));
+            this->lab_Size_height->Location = System::Drawing::Point(21, 21);
+            this->lab_Size_height->Name = L"lab_Size_height";
+            this->lab_Size_height->Size = System::Drawing::Size(42, 13);
+            this->lab_Size_height->TabIndex = 0;
+            this->lab_Size_height->Text = L"height";
             // 
-            // label2
+            // lab_Size_width
             // 
-            this->label2->AutoSize = true;
-            this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                                                              static_cast<System::Byte>(238)));
-            this->label2->Location = System::Drawing::Point(111, 21);
-            this->label2->Name = L"label2";
-            this->label2->Size = System::Drawing::Size(37, 13);
-            this->label2->TabIndex = 1;
-            this->label2->Text = L"width";
+            this->lab_Size_width->AutoSize = true;
+            this->lab_Size_width->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                                                                      static_cast<System::Byte>(238)));
+            this->lab_Size_width->Location = System::Drawing::Point(111, 21);
+            this->lab_Size_width->Name = L"lab_Size_width";
+            this->lab_Size_width->Size = System::Drawing::Size(37, 13);
+            this->lab_Size_width->TabIndex = 1;
+            this->lab_Size_width->Text = L"width";
             // 
-            // groupBox1
+            // grp_Size
             // 
-            this->groupBox1->Controls->Add(this->checkBox1);
-            this->groupBox1->Controls->Add(this->label3);
-            this->groupBox1->Controls->Add(this->label4);
-            this->groupBox1->Controls->Add(this->numericUpDown2);
-            this->groupBox1->Controls->Add(this->numericUpDown1);
-            this->groupBox1->Controls->Add(this->label1);
-            this->groupBox1->Controls->Add(this->label2);
-            this->groupBox1->Location = System::Drawing::Point(12, 12);
-            this->groupBox1->Name = L"groupBox1";
-            this->groupBox1->Size = System::Drawing::Size(282, 70);
-            this->groupBox1->TabIndex = 2;
-            this->groupBox1->TabStop = false;
-            this->groupBox1->Text = L"Size";
+            this->grp_Size->Controls->Add(this->ckbox_Size_lockRatio);
+            this->grp_Size->Controls->Add(this->lab_Size_x);
+            this->grp_Size->Controls->Add(this->num_Size_width);
+            this->grp_Size->Controls->Add(this->num_Size_height);
+            this->grp_Size->Controls->Add(this->lab_Size_height);
+            this->grp_Size->Controls->Add(this->lab_Size_width);
+            this->grp_Size->Location = System::Drawing::Point(12, 12);
+            this->grp_Size->Name = L"grp_Size";
+            this->grp_Size->Size = System::Drawing::Size(282, 70);
+            this->grp_Size->TabIndex = 2;
+            this->grp_Size->TabStop = false;
+            this->grp_Size->Text = L"Size";
             // 
-            // checkBox1
+            // ckbox_Size_lockRatio
             // 
-            this->checkBox1->AutoSize = true;
-            this->checkBox1->Location = System::Drawing::Point(189, 40);
-            this->checkBox1->Name = L"checkBox1";
-            this->checkBox1->Size = System::Drawing::Size(69, 17);
-            this->checkBox1->TabIndex = 6;
-            this->checkBox1->Text = L"lock ratio";
-            this->checkBox1->UseVisualStyleBackColor = true;
+            this->ckbox_Size_lockRatio->AutoSize = true;
+            this->ckbox_Size_lockRatio->Location = System::Drawing::Point(189, 40);
+            this->ckbox_Size_lockRatio->Name = L"ckbox_Size_lockRatio";
+            this->ckbox_Size_lockRatio->Size = System::Drawing::Size(69, 17);
+            this->ckbox_Size_lockRatio->TabIndex = 6;
+            this->ckbox_Size_lockRatio->Text = L"lock ratio";
+            this->ckbox_Size_lockRatio->UseVisualStyleBackColor = true;
             // 
-            // label3
+            // lab_Size_x
             // 
-            this->label3->AutoSize = true;
-            this->label3->Location = System::Drawing::Point(186, 21);
-            this->label3->Name = L"label3";
-            this->label3->Size = System::Drawing::Size(35, 13);
-            this->label3->TabIndex = 0;
-            this->label3->Text = L"label3";
-            this->label3->Visible = false;
+            this->lab_Size_x->AutoSize = true;
+            this->lab_Size_x->Location = System::Drawing::Point(84, 39);
+            this->lab_Size_x->Name = L"lab_Size_x";
+            this->lab_Size_x->Size = System::Drawing::Size(12, 13);
+            this->lab_Size_x->TabIndex = 5;
+            this->lab_Size_x->Text = L"x";
             // 
-            // label4
+            // num_Size_width
             // 
-            this->label4->AutoSize = true;
-            this->label4->Location = System::Drawing::Point(84, 39);
-            this->label4->Name = L"label4";
-            this->label4->Size = System::Drawing::Size(12, 13);
-            this->label4->TabIndex = 5;
-            this->label4->Text = L"x";
+            this->num_Size_width->Location = System::Drawing::Point(102, 37);
+            this->num_Size_width->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 28, 0, 0, 0 });
+            this->num_Size_width->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
+            this->num_Size_width->Name = L"num_Size_width";
+            this->num_Size_width->Size = System::Drawing::Size(71, 20);
+            this->num_Size_width->TabIndex = 3;
+            this->num_Size_width->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+            this->num_Size_width->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 15, 0, 0, 0 });
+            this->num_Size_width->ValueChanged += gcnew System::EventHandler(this, &MyForm::width_Click);
             // 
-            // numericUpDown2
+            // num_Size_height
             // 
-            this->numericUpDown2->Location = System::Drawing::Point(102, 37);
-            this->numericUpDown2->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 28, 0, 0, 0 });
-            this->numericUpDown2->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
-            this->numericUpDown2->Name = L"numericUpDown2";
-            this->numericUpDown2->Size = System::Drawing::Size(71, 20);
-            this->numericUpDown2->TabIndex = 3;
-            this->numericUpDown2->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
-            this->numericUpDown2->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 15, 0, 0, 0 });
-            this->numericUpDown2->ValueChanged += gcnew System::EventHandler(this, &MyForm::width_Click);
-            // 
-            // numericUpDown1
-            // 
-            this->numericUpDown1->Location = System::Drawing::Point(10, 37);
-            this->numericUpDown1->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 15, 0, 0, 0 });
-            this->numericUpDown1->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
-            this->numericUpDown1->Name = L"numericUpDown1";
-            this->numericUpDown1->Size = System::Drawing::Size(68, 20);
-            this->numericUpDown1->TabIndex = 2;
-            this->numericUpDown1->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
-            this->numericUpDown1->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 10, 0, 0, 0 });
-            this->numericUpDown1->ValueChanged += gcnew System::EventHandler(this, &MyForm::height_Click);
+            this->num_Size_height->Location = System::Drawing::Point(10, 37);
+            this->num_Size_height->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 15, 0, 0, 0 });
+            this->num_Size_height->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
+            this->num_Size_height->Name = L"num_Size_height";
+            this->num_Size_height->Size = System::Drawing::Size(68, 20);
+            this->num_Size_height->TabIndex = 2;
+            this->num_Size_height->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+            this->num_Size_height->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 10, 0, 0, 0 });
+            this->num_Size_height->ValueChanged += gcnew System::EventHandler(this, &MyForm::height_Click);
             // 
             // pictureBox1
             // 
@@ -200,130 +210,130 @@ namespace obdelnik03wingui01 {
             this->pictureBox1->TabIndex = 4;
             this->pictureBox1->TabStop = false;
             // 
-            // groupBox2
+            // grp_Edit
             // 
-            this->groupBox2->Controls->Add(this->label7);
-            this->groupBox2->Controls->Add(this->button5);
-            this->groupBox2->Controls->Add(this->button3);
-            this->groupBox2->Controls->Add(this->numericUpDown3);
-            this->groupBox2->Controls->Add(this->button4);
-            this->groupBox2->Controls->Add(this->button2);
-            this->groupBox2->Controls->Add(this->button1);
-            this->groupBox2->Controls->Add(this->label6);
-            this->groupBox2->Controls->Add(this->label5);
-            this->groupBox2->Location = System::Drawing::Point(12, 274);
-            this->groupBox2->Name = L"groupBox2";
-            this->groupBox2->Size = System::Drawing::Size(285, 134);
-            this->groupBox2->TabIndex = 5;
-            this->groupBox2->TabStop = false;
-            this->groupBox2->Text = L"Edit";
+            this->grp_Edit->Controls->Add(this->lab_Edit_percent);
+            this->grp_Edit->Controls->Add(this->but_Edit_generate);
+            this->grp_Edit->Controls->Add(this->but_Edit_minus10);
+            this->grp_Edit->Controls->Add(this->num_Edit_percent);
+            this->grp_Edit->Controls->Add(this->but_Edit_plus10);
+            this->grp_Edit->Controls->Add(this->but_Edit_fullFill);
+            this->grp_Edit->Controls->Add(this->but_Edit_fullEmpty);
+            this->grp_Edit->Controls->Add(this->lab_Edit_random);
+            this->grp_Edit->Controls->Add(this->lab_Edit_manually);
+            this->grp_Edit->Location = System::Drawing::Point(12, 274);
+            this->grp_Edit->Name = L"grp_Edit";
+            this->grp_Edit->Size = System::Drawing::Size(285, 134);
+            this->grp_Edit->TabIndex = 5;
+            this->grp_Edit->TabStop = false;
+            this->grp_Edit->Text = L"Edit";
             // 
-            // label7
+            // lab_Edit_percent
             // 
-            this->label7->AutoSize = true;
-            this->label7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                                                              static_cast<System::Byte>(238)));
-            this->label7->Location = System::Drawing::Point(144, 54);
-            this->label7->Name = L"label7";
-            this->label7->Size = System::Drawing::Size(16, 13);
-            this->label7->TabIndex = 10;
-            this->label7->Text = L"%";
+            this->lab_Edit_percent->AutoSize = true;
+            this->lab_Edit_percent->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                                                                        static_cast<System::Byte>(238)));
+            this->lab_Edit_percent->Location = System::Drawing::Point(144, 54);
+            this->lab_Edit_percent->Name = L"lab_Edit_percent";
+            this->lab_Edit_percent->Size = System::Drawing::Size(16, 13);
+            this->lab_Edit_percent->TabIndex = 10;
+            this->lab_Edit_percent->Text = L"%";
             // 
-            // button5
+            // but_Edit_generate
             // 
-            this->button5->Location = System::Drawing::Point(215, 49);
-            this->button5->Name = L"button5";
-            this->button5->Size = System::Drawing::Size(61, 23);
-            this->button5->TabIndex = 9;
-            this->button5->Text = L"Generate";
-            this->button5->UseVisualStyleBackColor = true;
+            this->but_Edit_generate->Location = System::Drawing::Point(215, 49);
+            this->but_Edit_generate->Name = L"but_Edit_generate";
+            this->but_Edit_generate->Size = System::Drawing::Size(61, 23);
+            this->but_Edit_generate->TabIndex = 9;
+            this->but_Edit_generate->Text = L"Generate";
+            this->but_Edit_generate->UseVisualStyleBackColor = true;
             // 
-            // button3
+            // but_Edit_minus10
             // 
-            this->button3->Location = System::Drawing::Point(63, 49);
-            this->button3->Name = L"button3";
-            this->button3->Size = System::Drawing::Size(33, 23);
-            this->button3->TabIndex = 8;
-            this->button3->Text = L"-10";
-            this->button3->UseVisualStyleBackColor = true;
-            this->button3->Click += gcnew System::EventHandler(this, &MyForm::minus10_Click);
+            this->but_Edit_minus10->Location = System::Drawing::Point(63, 49);
+            this->but_Edit_minus10->Name = L"but_Edit_minus10";
+            this->but_Edit_minus10->Size = System::Drawing::Size(33, 23);
+            this->but_Edit_minus10->TabIndex = 8;
+            this->but_Edit_minus10->Text = L"-10";
+            this->but_Edit_minus10->UseVisualStyleBackColor = true;
+            this->but_Edit_minus10->Click += gcnew System::EventHandler(this, &MyForm::minus10_Click);
             // 
-            // numericUpDown3
+            // num_Edit_percent
             // 
-            this->numericUpDown3->Location = System::Drawing::Point(102, 52);
-            this->numericUpDown3->Name = L"numericUpDown3";
-            this->numericUpDown3->Size = System::Drawing::Size(42, 20);
-            this->numericUpDown3->TabIndex = 7;
-            this->numericUpDown3->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
-            this->numericUpDown3->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, 0 });
+            this->num_Edit_percent->Location = System::Drawing::Point(102, 52);
+            this->num_Edit_percent->Name = L"num_Edit_percent";
+            this->num_Edit_percent->Size = System::Drawing::Size(42, 20);
+            this->num_Edit_percent->TabIndex = 7;
+            this->num_Edit_percent->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+            this->num_Edit_percent->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 100, 0, 0, 0 });
             // 
-            // button4
+            // but_Edit_plus10
             // 
-            this->button4->Location = System::Drawing::Point(166, 49);
-            this->button4->Name = L"button4";
-            this->button4->Size = System::Drawing::Size(33, 23);
-            this->button4->TabIndex = 6;
-            this->button4->Text = L"+10";
-            this->button4->UseVisualStyleBackColor = true;
-            this->button4->Click += gcnew System::EventHandler(this, &MyForm::plus10_Click);
+            this->but_Edit_plus10->Location = System::Drawing::Point(166, 49);
+            this->but_Edit_plus10->Name = L"but_Edit_plus10";
+            this->but_Edit_plus10->Size = System::Drawing::Size(33, 23);
+            this->but_Edit_plus10->TabIndex = 6;
+            this->but_Edit_plus10->Text = L"+10";
+            this->but_Edit_plus10->UseVisualStyleBackColor = true;
+            this->but_Edit_plus10->Click += gcnew System::EventHandler(this, &MyForm::plus10_Click);
             // 
-            // button2
+            // but_Edit_fullFill
             // 
-            this->button2->Location = System::Drawing::Point(147, 19);
-            this->button2->Name = L"button2";
-            this->button2->Size = System::Drawing::Size(75, 23);
-            this->button2->TabIndex = 4;
-            this->button2->Text = L"Black";
-            this->button2->UseVisualStyleBackColor = true;
-            this->button2->Click += gcnew System::EventHandler(this, &MyForm::but_FullBlack_Click);
+            this->but_Edit_fullFill->Location = System::Drawing::Point(147, 19);
+            this->but_Edit_fullFill->Name = L"but_Edit_fullFill";
+            this->but_Edit_fullFill->Size = System::Drawing::Size(75, 23);
+            this->but_Edit_fullFill->TabIndex = 4;
+            this->but_Edit_fullFill->Text = L"Black";
+            this->but_Edit_fullFill->UseVisualStyleBackColor = true;
+            this->but_Edit_fullFill->Click += gcnew System::EventHandler(this, &MyForm::but_FullBlack_Click);
             // 
-            // button1
+            // but_Edit_fullEmpty
             // 
-            this->button1->Location = System::Drawing::Point(63, 20);
-            this->button1->Name = L"button1";
-            this->button1->Size = System::Drawing::Size(75, 23);
-            this->button1->TabIndex = 3;
-            this->button1->Text = L"White";
-            this->button1->UseVisualStyleBackColor = true;
-            this->button1->Click += gcnew System::EventHandler(this, &MyForm::but_FullWhite_Click);
+            this->but_Edit_fullEmpty->Location = System::Drawing::Point(63, 20);
+            this->but_Edit_fullEmpty->Name = L"but_Edit_fullEmpty";
+            this->but_Edit_fullEmpty->Size = System::Drawing::Size(75, 23);
+            this->but_Edit_fullEmpty->TabIndex = 3;
+            this->but_Edit_fullEmpty->Text = L"White";
+            this->but_Edit_fullEmpty->UseVisualStyleBackColor = true;
+            this->but_Edit_fullEmpty->Click += gcnew System::EventHandler(this, &MyForm::but_FullWhite_Click);
             // 
-            // label6
+            // lab_Edit_random
             // 
-            this->label6->AutoSize = true;
-            this->label6->Location = System::Drawing::Point(9, 54);
-            this->label6->Name = L"label6";
-            this->label6->Size = System::Drawing::Size(50, 13);
-            this->label6->TabIndex = 2;
-            this->label6->Text = L"Random:";
+            this->lab_Edit_random->AutoSize = true;
+            this->lab_Edit_random->Location = System::Drawing::Point(9, 54);
+            this->lab_Edit_random->Name = L"lab_Edit_random";
+            this->lab_Edit_random->Size = System::Drawing::Size(50, 13);
+            this->lab_Edit_random->TabIndex = 2;
+            this->lab_Edit_random->Text = L"Random:";
             // 
-            // label5
+            // lab_Edit_manually
             // 
-            this->label5->AutoSize = true;
-            this->label5->Location = System::Drawing::Point(6, 25);
-            this->label5->Name = L"label5";
-            this->label5->Size = System::Drawing::Size(52, 13);
-            this->label5->TabIndex = 1;
-            this->label5->Text = L"Manually:";
+            this->lab_Edit_manually->AutoSize = true;
+            this->lab_Edit_manually->Location = System::Drawing::Point(6, 25);
+            this->lab_Edit_manually->Name = L"lab_Edit_manually";
+            this->lab_Edit_manually->Size = System::Drawing::Size(52, 13);
+            this->lab_Edit_manually->TabIndex = 1;
+            this->lab_Edit_manually->Text = L"Manually:";
             // 
             // MyForm
             // 
             this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
             this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
             this->ClientSize = System::Drawing::Size(306, 521);
-            this->Controls->Add(this->groupBox2);
+            this->Controls->Add(this->grp_Edit);
             this->Controls->Add(this->pictureBox1);
-            this->Controls->Add(this->groupBox1);
+            this->Controls->Add(this->grp_Size);
             this->Name = L"MyForm";
             this->Text = L"My App";
             this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
-            this->groupBox1->ResumeLayout(false);
-            this->groupBox1->PerformLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown2))->EndInit();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
+            this->grp_Size->ResumeLayout(false);
+            this->grp_Size->PerformLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->num_Size_width))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->num_Size_height))->EndInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
-            this->groupBox2->ResumeLayout(false);
-            this->groupBox2->PerformLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown3))->EndInit();
+            this->grp_Edit->ResumeLayout(false);
+            this->grp_Edit->PerformLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->num_Edit_percent))->EndInit();
             this->ResumeLayout(false);
 
         }
@@ -338,8 +348,8 @@ namespace obdelnik03wingui01 {
         private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e)
         {
 
-            rows = Int32(this->numericUpDown1->Value);
-            cols = Int32(this->numericUpDown2->Value);
+            rows = Int32(this->num_Size_height->Value);
+            cols = Int32(this->num_Size_width->Value);
             pic1w = pictureBox1->Width;
             pic1h = pictureBox1->Height;
             //	Prepare an image component and a Graphics handle.
@@ -376,8 +386,8 @@ namespace obdelnik03wingui01 {
             //drawRect2(e, Pens::White, Point(0, 0), Int32(MYSIZE - 1));
             //drawRect(panel, Pens::White, Point(0, 0), Int32(MYSIZE - 1));
 
-            rows = Int32(this->numericUpDown1->Value);  // height
-            cols = Int32(this->numericUpDown2->Value);  // width
+            rows = Int32(this->num_Size_height->Value);  // height
+            cols = Int32(this->num_Size_width->Value);  // width
 
             Int32 h = rows*MYSIZE;
             Int32 w = cols*MYSIZE;
@@ -416,8 +426,8 @@ namespace obdelnik03wingui01 {
         {
             //pictureBox1->Image = pictureBox1->Image;  // needed per tutor
 
-            rows = Int32(this->numericUpDown1->Value);
-            cols = Int32(this->numericUpDown2->Value);
+            rows = Int32(this->num_Size_height->Value);
+            cols = Int32(this->num_Size_width->Value);
 
 
             Rectangle rect = pictureBox1->Bounds;
@@ -450,32 +460,32 @@ namespace obdelnik03wingui01 {
 
         private: System::Void minus10_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            Int32 val = Int32(this->numericUpDown3->Value);
+            Int32 val = Int32(this->num_Edit_percent->Value);
             if (val <= 10) {
                 val = 0;
             } else {
                 val = val - 10;
             }
-            this->numericUpDown3->Value = Decimal(val);
+            this->num_Edit_percent->Value = Decimal(val);
         }
 
         private: System::Void plus10_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            Int32 val = Int32(this->numericUpDown3->Value);
+            Int32 val = Int32(this->num_Edit_percent->Value);
             if (val >= 90) {
                 val = 100;
             } else {
                 val = val + 10;
             }
-            this->numericUpDown3->Value = Decimal(val);
+            this->num_Edit_percent->Value = Decimal(val);
         }
 
         private: System::Void but_FullWhite_Click(System::Object^  sender, System::EventArgs^  e)
         {
             Int32 rows, cols;
 
-            rows = Int32(this->numericUpDown1->Value);  // height
-            cols = Int32(this->numericUpDown2->Value);  // width
+            rows = Int32(this->num_Size_height->Value);  // height
+            cols = Int32(this->num_Size_width->Value);  // width
 
 
             ;
