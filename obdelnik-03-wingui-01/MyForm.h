@@ -1,5 +1,7 @@
 #pragma once
 
+#include "C_Matrix.h"
+
 namespace obdelnik03wingui01 {
 
     using namespace System;
@@ -41,16 +43,9 @@ namespace obdelnik03wingui01 {
 
         private: System::Windows::Forms::GroupBox^  grp_Size;
         private: System::Windows::Forms::NumericUpDown^  num_Size_width;
-
-
         private: System::Windows::Forms::NumericUpDown^  num_Size_height;
         private: System::Windows::Forms::CheckBox^  ckbox_Size_lockRatio;
         private: System::Windows::Forms::Label^  lab_Size_x;
-
-
-
-
-
 
         private: System::Windows::Forms::PictureBox^  pictureBox1;
 
@@ -59,28 +54,12 @@ namespace obdelnik03wingui01 {
         private: System::Windows::Forms::NumericUpDown^  num_Edit_percent;
         private: System::Windows::Forms::Button^  but_Edit_plus10;
         private: System::Windows::Forms::Button^  but_Edit_fullFill;
-
-
-
-
-
-
-
-
-        private: System::Windows::Forms::Button^  but_Edit_fullEmpty;
-
-
-
+        private: System::Windows::Forms::Button^  but_Edit_fullFree;
 
         private: System::Windows::Forms::Label^  lab_Edit_random;
         private: System::Windows::Forms::Label^  lab_Edit_percent;
         private: System::Windows::Forms::Button^  but_Edit_generate;
         private: System::Windows::Forms::Button^  but_Edit_minus10;
-
-
-
-
-
 
         private:
         /// <summary>
@@ -110,7 +89,7 @@ namespace obdelnik03wingui01 {
             this->num_Edit_percent = (gcnew System::Windows::Forms::NumericUpDown());
             this->but_Edit_plus10 = (gcnew System::Windows::Forms::Button());
             this->but_Edit_fullFill = (gcnew System::Windows::Forms::Button());
-            this->but_Edit_fullEmpty = (gcnew System::Windows::Forms::Button());
+            this->but_Edit_fullFree = (gcnew System::Windows::Forms::Button());
             this->lab_Edit_random = (gcnew System::Windows::Forms::Label());
             this->lab_Edit_manually = (gcnew System::Windows::Forms::Label());
             this->grp_Size->SuspendLayout();
@@ -218,7 +197,7 @@ namespace obdelnik03wingui01 {
             this->grp_Edit->Controls->Add(this->num_Edit_percent);
             this->grp_Edit->Controls->Add(this->but_Edit_plus10);
             this->grp_Edit->Controls->Add(this->but_Edit_fullFill);
-            this->grp_Edit->Controls->Add(this->but_Edit_fullEmpty);
+            this->grp_Edit->Controls->Add(this->but_Edit_fullFree);
             this->grp_Edit->Controls->Add(this->lab_Edit_random);
             this->grp_Edit->Controls->Add(this->lab_Edit_manually);
             this->grp_Edit->Location = System::Drawing::Point(12, 274);
@@ -281,21 +260,21 @@ namespace obdelnik03wingui01 {
             // 
             this->but_Edit_fullFill->Location = System::Drawing::Point(147, 19);
             this->but_Edit_fullFill->Name = L"but_Edit_fullFill";
-            this->but_Edit_fullFill->Size = System::Drawing::Size(75, 23);
+            this->but_Edit_fullFill->Size = System::Drawing::Size(82, 23);
             this->but_Edit_fullFill->TabIndex = 4;
-            this->but_Edit_fullFill->Text = L"Black";
+            this->but_Edit_fullFill->Text = L"Full Occupied";
             this->but_Edit_fullFill->UseVisualStyleBackColor = true;
             this->but_Edit_fullFill->Click += gcnew System::EventHandler(this, &MyForm::but_FullBlack_Click);
             // 
-            // but_Edit_fullEmpty
+            // but_Edit_fullFree
             // 
-            this->but_Edit_fullEmpty->Location = System::Drawing::Point(63, 20);
-            this->but_Edit_fullEmpty->Name = L"but_Edit_fullEmpty";
-            this->but_Edit_fullEmpty->Size = System::Drawing::Size(75, 23);
-            this->but_Edit_fullEmpty->TabIndex = 3;
-            this->but_Edit_fullEmpty->Text = L"White";
-            this->but_Edit_fullEmpty->UseVisualStyleBackColor = true;
-            this->but_Edit_fullEmpty->Click += gcnew System::EventHandler(this, &MyForm::but_FullWhite_Click);
+            this->but_Edit_fullFree->Location = System::Drawing::Point(63, 20);
+            this->but_Edit_fullFree->Name = L"but_Edit_fullFree";
+            this->but_Edit_fullFree->Size = System::Drawing::Size(75, 23);
+            this->but_Edit_fullFree->TabIndex = 3;
+            this->but_Edit_fullFree->Text = L"Full Free";
+            this->but_Edit_fullFree->UseVisualStyleBackColor = true;
+            this->but_Edit_fullFree->Click += gcnew System::EventHandler(this, &MyForm::but_FullEmpty_Click);
             // 
             // lab_Edit_random
             // 
@@ -339,11 +318,17 @@ namespace obdelnik03wingui01 {
         }
 #pragma endregion
 
-        Int32 MYSIZE = 10;
+        Int32 SMALL_RECT_SIZE = 10;
+
+
+        // TODO:********** M.init(4, 5);
 
         int rows, cols;        //  # of rows and cols from "height" and "width"
         int pic1h, pic1w;		//	Height and width of pictureBox1
         Graphics^ g;			//		A Graphics handle
+
+        //C_Matrix^ M = gcnew C_Matrix;
+        C_Matrix* M = new C_Matrix;
 
         private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e)
         {
@@ -363,7 +348,7 @@ namespace obdelnik03wingui01 {
             rect_draw();
         }
 
-        private: System::Void draw_line_W(Pen^ pen, Point loc, Int32 length)
+        private: System::Void draw_w_line(Pen^ pen, Point loc, Int32 length)
         {
             Int32 x, y;
             x = loc.X;
@@ -371,7 +356,7 @@ namespace obdelnik03wingui01 {
             g->DrawLine(pen, loc, Point(x + length - 1, y));
         }
 
-        private: System::Void draw_line_H(Pen^ pen, Point loc, Int32 length)
+        private: System::Void draw_h_line(Pen^ pen, Point loc, Int32 length)
         {
             Int32 x, y;
             x = loc.X;
@@ -379,24 +364,40 @@ namespace obdelnik03wingui01 {
             g->DrawLine(pen, loc, Point(x, y + length));
         }
 
+                 // draw small rectangle on position [row,col] in matrix
+        private: System::Void draw_small_rect(int row, int col, Color color)
+        {
+            pictureBox1->Image = pictureBox1->Image;  // needed per tutor
+
+            int x = row*SMALL_RECT_SIZE + 1;
+            int y = col*SMALL_RECT_SIZE + 1;
+            int size = SMALL_RECT_SIZE - 1;
+            SolidBrush^ myBrush = gcnew SolidBrush(color);
+
+            g->FillRectangle(myBrush, x, y, size, size);
+            //g->FillRectangle(myBrush, rect);
+            delete myBrush;
+        }
+
+
         private: System::Void rect_draw()
         {
             Int32 rows, cols;
 
-            //drawRect2(e, Pens::White, Point(0, 0), Int32(MYSIZE - 1));
-            //drawRect(panel, Pens::White, Point(0, 0), Int32(MYSIZE - 1));
+            //drawRect2(e, Pens::White, Point(0, 0), Int32(SMALL_RECT_SIZE - 1));
+            //drawRect(panel, Pens::White, Point(0, 0), Int32(SMALL_RECT_SIZE - 1));
 
             rows = Int32(this->num_Size_height->Value);  // height
             cols = Int32(this->num_Size_width->Value);  // width
 
-            Int32 h = rows*MYSIZE;
-            Int32 w = cols*MYSIZE;
+            Int32 h = rows*SMALL_RECT_SIZE;
+            Int32 w = cols*SMALL_RECT_SIZE;
 
             for (Int32 i = 0; i <= cols; i++) {
-                draw_line_H(Pens::Black, Point(i*MYSIZE, 0), Int32(h));
+                draw_h_line(Pens::Black, Point(i*SMALL_RECT_SIZE, 0), Int32(h));
             }
             for (Int32 i = 0; i <= rows; i++) {
-                draw_line_W(Pens::Black, Point(0, i*MYSIZE), Int32(w));
+                draw_w_line(Pens::Black, Point(0, i*SMALL_RECT_SIZE), Int32(w));
             }
 
         }
@@ -480,23 +481,29 @@ namespace obdelnik03wingui01 {
             this->num_Edit_percent->Value = Decimal(val);
         }
 
-        private: System::Void but_FullWhite_Click(System::Object^  sender, System::EventArgs^  e)
+        private: System::Void but_FullEmpty_Click(System::Object^  sender, System::EventArgs^  e)
         {
             Int32 rows, cols;
 
             rows = Int32(this->num_Size_height->Value);  // height
-            cols = Int32(this->num_Size_width->Value);  // width
+            cols = Int32(this->num_Size_width->Value);   // width
+
+            draw_small_rect(2, 1, Color::White);
 
 
-            ;
-
-            //drawRect2(e, Pens::White, Point(0, 0), Int32(MYSIZE - 1));
-            //drawRect(panel, Pens::White, Point(0, 0), Int32(MYSIZE - 1));
+            //drawRect2(e, Pens::White, Point(0, 0), Int32(SMALL_RECT_SIZE - 1));
+            //drawRect(panel, Pens::White, Point(0, 0), Int32(SMALL_RECT_SIZE - 1));
 
         }
 
         private: System::Void but_FullBlack_Click(System::Object^  sender, System::EventArgs^  e)
         {
+            draw_small_rect(2, 1, Color::White);
+
         }
+
     };
+
+
+
 }
