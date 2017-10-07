@@ -5,13 +5,13 @@
 typedef std::vector<bool> T_BoolVector;
 typedef std::vector<T_BoolVector> T_BoolMatrix;
 
-class C_Matrix
+ref class C_Matrix
 {
     public:
-    T_BoolMatrix a;
+    T_BoolMatrix *a;
 
     C_Matrix();
-    C_Matrix(int width, int height);
+    void init(int width, int height);
     virtual ~C_Matrix();
 
     bool set_full_true();

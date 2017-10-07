@@ -5,25 +5,28 @@ C_Matrix::C_Matrix()
     w = 0;
     h = 0;
     valid = false;
+    a = new T_BoolMatrix;
 }
 
-C_Matrix::C_Matrix(int width, int height)
+void C_Matrix::init(int width, int height)
 {
     w = width;
     h = height;
     valid = false;
+
     for (int i = 0; i < h; i++) {
         T_BoolVector myvec;
         for (size_t j = 0; j < w; j++) {
             myvec.push_back(false);
         }
-        a.push_back(myvec);
+        (*a).push_back(myvec);
     }
 
 } // of ctor C_Matrix(w,h)
 
 C_Matrix::~C_Matrix()
 {
+    delete a;
 } // of dtor C_Matrix()
 
 
@@ -34,7 +37,7 @@ bool C_Matrix::set_full_value(bool value)
     }
     for (size_t i = 0; i < h; i++) {
         for (size_t j = 0; j < w; j++) {
-            a[i][j] = value;
+            (*a)[i][j] = value;
         }
     }
     valid = true;
@@ -61,7 +64,7 @@ bool C_Matrix::generate_random(int perct)
     for (size_t i = 0; i < h; i++) {
         for (size_t j = 0; j < w; j++) {
             f = rand() / (RAND_MAX + 1.);
-            a[i][j] = (f < perct);
+            (*a)[i][j] = (f < perct);
         }
     }
     valid = true;
@@ -74,7 +77,7 @@ bool C_Matrix::set_1(int x, int y, bool value)
     if (!valid || h == 0 || w == 0) {
         return false;
     }
-    a[x][y] = value;
+    (*a)[x][y] = value;
     return true;
 } // of set_1()
 

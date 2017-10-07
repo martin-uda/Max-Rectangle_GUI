@@ -2,6 +2,10 @@
 
 #include "C_Matrix.h"
 
+#define DEFAULT_FLOOR_OFFSET 10
+#define DEFAULT_FLOOR_OFFSET_X DEFAULT_FLOOR_OFFSET
+#define DEFAULT_FLOOR_OFFSET_Y DEFAULT_FLOOR_OFFSET
+
 namespace obdelnik03wingui01 {
 
     using namespace System;
@@ -11,11 +15,148 @@ namespace obdelnik03wingui01 {
     using namespace System::Data;
     using namespace System::Drawing;
 
+
+
     /// <summary>
     /// Summary for MyForm
     /// </summary>
     public ref class MyForm : public System::Windows::Forms::Form
     {
+        Int32 SMALL_RECT_SIZE = 10;
+
+        ref class Floor
+        {
+            Int32 SMALL_RECT_SIZE = 10;
+
+            int h, w;		// Height and width of floor in px
+            int rows, cols;   // height and width of floor in tile
+            int size_sq;
+            int perct;      // 
+            Color stone_color;
+            Color free_color;
+            int offset_x, offset_y;  // offset from origin of pixBox
+            Graphics^ g;             // A Graphics handle; = Graphics::FromImage(pictureBox1->Image);
+            PictureBox^ picBox;      // 
+            int pic_box_h, pic_box_w;  // size of picBox
+
+            public:
+            Floor(PictureBox^ picBox_, int rows_, int cols_, int off_x, int off_y)
+            {
+                picBox = picBox_;
+                cols = cols_;
+                rows = rows_;
+                size_sq = SMALL_RECT_SIZE;
+                h = calc_length(rows);
+                w = calc_length(cols);
+                offset_x = off_x;
+                offset_y = off_y;
+                pic_box_w = picBox->Width;
+                pic_box_h = picBox->Height;
+                //	Prepare an image component and a Graphics handle.
+                picBox->Image = gcnew Bitmap(pic_box_w, pic_box_h);
+                g = Graphics::FromImage(picBox->Image);
+            }
+
+            ~Floor()
+            {
+            }
+
+            int calc_length(int tiles)
+            {
+                return tiles * size_sq;
+            }
+
+            void set_rows(int rows_)
+            {
+                rows = rows_;
+                h = calc_length(rows);
+            }
+
+            void set_cols(int cols_)
+            {
+                cols = cols_;
+                w = calc_length(cols);
+            }
+
+            void clear_rect(int x_, int y_, int w_, int h_)
+            {
+                picBox->Image = picBox->Image;  // needed per tutor
+                Color color = picBox->BackColor;
+                SolidBrush^ myBrush = gcnew SolidBrush(color);
+                g->FillRectangle(myBrush, x_, y_, w_, h_);
+                //g->FillRectangle(myBrush, rect);
+                delete myBrush;
+            }
+
+            void clear_all_pic_box()
+            {
+                clear_rect(0, 0, pic_box_w, pic_box_h);
+            }
+
+            void clear_floor()
+            {
+                clear_rect(offset_x, offset_y, w + 1, h + 1);
+            }
+
+            void draw_x_line(Pen^ pen, Point loc, Int32 length)
+            {
+                Int32 x, y;
+                x = loc.X;
+                y = loc.Y;
+                g->DrawLine(pen, loc, Point(x + length, y));
+            }
+
+            void draw_y_line(Pen^ pen, Point loc, Int32 length)
+            {
+                Int32 x, y;
+                x = loc.X;
+                y = loc.Y;
+                g->DrawLine(pen, loc, Point(x, y + length));
+            }
+
+            // draw small rectangle on position [row,col] in matrix
+            void draw_small_rect(int row, int col, Color color)
+            {
+                picBox->Image = picBox->Image;  // needed per tutor
+                int x = row*size_sq + 1;
+                int y = col*size_sq + 1;
+                int size = size_sq - 1;
+                SolidBrush^ myBrush = gcnew SolidBrush(color);
+                g->FillRectangle(myBrush, x, y, size, size);
+                //g->FillRectangle(myBrush, rect);
+                delete myBrush;
+            }
+
+            void draw_floor()
+            {
+                for (Int32 i = 0; i <= cols; i++) {
+                    draw_y_line(Pens::Black,
+                                Point(i*size_sq + offset_x, 0 + offset_y), Int32(h));
+                }
+                for (Int32 i = 0; i <= rows; i++) {
+                    draw_x_line(Pens::Black,
+                                Point(0 + offset_x, i*size_sq + offset_y), Int32(w));
+                }
+                draw_matrix();
+            }
+
+            void draw_matrix()
+            {
+
+            }
+
+            void redraw_floor()
+            {
+                clear_floor();
+                draw_floor();
+            }
+
+
+        };  // of class Pic_Box  ==========================================
+
+
+
+
         public:
         MyForm(void)
         {
@@ -159,7 +300,7 @@ namespace obdelnik03wingui01 {
             // num_Size_width
             // 
             this->num_Size_width->Location = System::Drawing::Point(102, 37);
-            this->num_Size_width->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 28, 0, 0, 0 });
+            this->num_Size_width->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 26, 0, 0, 0 });
             this->num_Size_width->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
             this->num_Size_width->Name = L"num_Size_width";
             this->num_Size_width->Size = System::Drawing::Size(71, 20);
@@ -171,7 +312,7 @@ namespace obdelnik03wingui01 {
             // num_Size_height
             // 
             this->num_Size_height->Location = System::Drawing::Point(10, 37);
-            this->num_Size_height->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 15, 0, 0, 0 });
+            this->num_Size_height->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 14, 0, 0, 0 });
             this->num_Size_height->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
             this->num_Size_height->Name = L"num_Size_height";
             this->num_Size_height->Size = System::Drawing::Size(68, 20);
@@ -185,7 +326,7 @@ namespace obdelnik03wingui01 {
             this->pictureBox1->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
             this->pictureBox1->Location = System::Drawing::Point(12, 97);
             this->pictureBox1->Name = L"pictureBox1";
-            this->pictureBox1->Size = System::Drawing::Size(285, 155);
+            this->pictureBox1->Size = System::Drawing::Size(285, 165);
             this->pictureBox1->TabIndex = 4;
             this->pictureBox1->TabStop = false;
             // 
@@ -318,139 +459,39 @@ namespace obdelnik03wingui01 {
         }
 #pragma endregion
 
-        Int32 SMALL_RECT_SIZE = 10;
-
 
         // TODO:********** M.init(4, 5);
 
-        int rows, cols;        //  # of rows and cols from "height" and "width"
-        int pic1h, pic1w;		//	Height and width of pictureBox1
-        Graphics^ g;			//		A Graphics handle
-
-        //C_Matrix^ M = gcnew C_Matrix;
-        C_Matrix* M = new C_Matrix;
+        Floor^ floor;
+        C_Matrix^ M = gcnew C_Matrix();
+        //Graphics^ g;
 
         private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e)
         {
 
-            rows = Int32(this->num_Size_height->Value);
-            cols = Int32(this->num_Size_width->Value);
-            pic1w = pictureBox1->Width;
-            pic1h = pictureBox1->Height;
-            //	Prepare an image component and a Graphics handle.
-            pictureBox1->Image = gcnew Bitmap(pic1w, pic1h);
-            g = Graphics::FromImage(pictureBox1->Image);
+            int rows = Int32(this->num_Size_height->Value);
+            int cols = Int32(this->num_Size_width->Value);
+            int offset = DEFAULT_FLOOR_OFFSET;
+            floor = gcnew Floor(pictureBox1, rows, cols, offset, offset);
 
             //Color color = panel->BackColor;
-            Color color = pictureBox1->BackColor;
+            //Color color = pictureBox1->BackColor;
             //Color color = Color::White;
-            clear_pic();
-            rect_draw();
+            floor->clear_all_pic_box();
+            floor->draw_floor();
         }
-
-        private: System::Void draw_w_line(Pen^ pen, Point loc, Int32 length)
-        {
-            Int32 x, y;
-            x = loc.X;
-            y = loc.Y;
-            g->DrawLine(pen, loc, Point(x + length - 1, y));
-        }
-
-        private: System::Void draw_h_line(Pen^ pen, Point loc, Int32 length)
-        {
-            Int32 x, y;
-            x = loc.X;
-            y = loc.Y;
-            g->DrawLine(pen, loc, Point(x, y + length));
-        }
-
-                 // draw small rectangle on position [row,col] in matrix
-        private: System::Void draw_small_rect(int row, int col, Color color)
-        {
-            pictureBox1->Image = pictureBox1->Image;  // needed per tutor
-
-            int x = row*SMALL_RECT_SIZE + 1;
-            int y = col*SMALL_RECT_SIZE + 1;
-            int size = SMALL_RECT_SIZE - 1;
-            SolidBrush^ myBrush = gcnew SolidBrush(color);
-
-            g->FillRectangle(myBrush, x, y, size, size);
-            //g->FillRectangle(myBrush, rect);
-            delete myBrush;
-        }
-
-
-        private: System::Void rect_draw()
-        {
-            Int32 rows, cols;
-
-            //drawRect2(e, Pens::White, Point(0, 0), Int32(SMALL_RECT_SIZE - 1));
-            //drawRect(panel, Pens::White, Point(0, 0), Int32(SMALL_RECT_SIZE - 1));
-
-            rows = Int32(this->num_Size_height->Value);  // height
-            cols = Int32(this->num_Size_width->Value);  // width
-
-            Int32 h = rows*SMALL_RECT_SIZE;
-            Int32 w = cols*SMALL_RECT_SIZE;
-
-            for (Int32 i = 0; i <= cols; i++) {
-                draw_h_line(Pens::Black, Point(i*SMALL_RECT_SIZE, 0), Int32(h));
-            }
-            for (Int32 i = 0; i <= rows; i++) {
-                draw_w_line(Pens::Black, Point(0, i*SMALL_RECT_SIZE), Int32(w));
-            }
-
-        }
-
-        private: System::Void rect_redraw()
-        {
-            clear_pic();
-            rect_draw();
-        }
-
-        private: void clear_pic()
-        {
-            pictureBox1->Image = pictureBox1->Image;  // needed per tutor
-
-            Color color = pictureBox1->BackColor;
-            Rectangle rect = pictureBox1->Bounds;
-            rect.Location = Point(0, 0);
-            SolidBrush^ myBrush = gcnew SolidBrush(color);
-
-            //g->FillRectangle(myBrush, 0, 0, pic1w, pic1h);
-            g->FillRectangle(myBrush, rect);
-
-            delete myBrush;
-        }
-
-        private: void init_pic(Color color)
-        {
-            //pictureBox1->Image = pictureBox1->Image;  // needed per tutor
-
-            rows = Int32(this->num_Size_height->Value);
-            cols = Int32(this->num_Size_width->Value);
-
-
-            Rectangle rect = pictureBox1->Bounds;
-            rect.Location = Point(0, 0);
-            SolidBrush^ myBrush = gcnew SolidBrush(color);
-
-            //g->FillRectangle(myBrush, 0, 0, pic1w, pic1h);
-            g->FillRectangle(myBrush, rect);
-
-            delete myBrush;
-        }
-
-
 
         private: System::Void height_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            rect_redraw();
+            floor->clear_floor();
+            floor->set_rows(Int32(this->num_Size_height->Value));
+            floor->draw_floor();
         }
         private: System::Void width_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            rect_redraw();
-
+            floor->clear_floor();
+            floor->set_cols(Int32(this->num_Size_width->Value));
+            floor->draw_floor();
         }
                  //private: System::Void TextBox1_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e)
                  //{
@@ -483,27 +524,15 @@ namespace obdelnik03wingui01 {
 
         private: System::Void but_FullEmpty_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            Int32 rows, cols;
-
-            rows = Int32(this->num_Size_height->Value);  // height
-            cols = Int32(this->num_Size_width->Value);   // width
-
-            draw_small_rect(2, 1, Color::White);
-
-
-            //drawRect2(e, Pens::White, Point(0, 0), Int32(SMALL_RECT_SIZE - 1));
-            //drawRect(panel, Pens::White, Point(0, 0), Int32(SMALL_RECT_SIZE - 1));
-
+            floor->draw_small_rect(2, 1, Color::White);
         }
 
         private: System::Void but_FullBlack_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            draw_small_rect(2, 1, Color::White);
-
+            floor->clear_all_pic_box();
         }
 
-    };
+    };  // of public ref class MyForm  ===============================
 
 
-
-}
+}  // of namespace obdelnik03wingui01
