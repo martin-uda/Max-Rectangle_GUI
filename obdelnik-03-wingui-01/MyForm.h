@@ -5,6 +5,8 @@
 #define DEFAULT_FLOOR_OFFSET 10
 #define DEFAULT_FLOOR_OFFSET_X DEFAULT_FLOOR_OFFSET
 #define DEFAULT_FLOOR_OFFSET_Y DEFAULT_FLOOR_OFFSET
+#define STONE_COLOR Color::DimGray
+#define FREE_COLOR  Color::White
 
 namespace obdelnik03wingui01 {
 
@@ -24,7 +26,7 @@ namespace obdelnik03wingui01 {
     {
         Int32 SMALL_RECT_SIZE = 10;
 
-        ref class Floor
+        ref class Floor   // --- Floor --- Floor --- Floor --- Floor --- Floor 
         {
             Int32 SMALL_RECT_SIZE = 10;
 
@@ -39,19 +41,24 @@ namespace obdelnik03wingui01 {
             PictureBox^ picBox;      // 
             int pic_box_h, pic_box_w;  // size of picBox
 
+            C_Matrix^ M = gcnew C_Matrix();
+
             public:
-            Floor(PictureBox^ picBox_, int rows_, int cols_, int off_x, int off_y)
+            Floor(PictureBox^ picBox_, int rows_, int cols_, int off_x, int off_y,
+                  Color stone_color_, Color free_color_)
             {
                 picBox = picBox_;
                 cols = cols_;
                 rows = rows_;
                 size_sq = SMALL_RECT_SIZE;
-                h = calc_length(rows);
-                w = calc_length(cols);
+                h = calc_line_length(rows);
+                w = calc_line_length(cols);
                 offset_x = off_x;
                 offset_y = off_y;
                 pic_box_w = picBox->Width;
                 pic_box_h = picBox->Height;
+                stone_color = stone_color_;
+                free_color = free_color_;
                 //	Prepare an image component and a Graphics handle.
                 picBox->Image = gcnew Bitmap(pic_box_w, pic_box_h);
                 g = Graphics::FromImage(picBox->Image);
@@ -61,7 +68,7 @@ namespace obdelnik03wingui01 {
             {
             }
 
-            int calc_length(int tiles)
+            int calc_line_length(int tiles)
             {
                 return tiles * size_sq;
             }
@@ -69,13 +76,13 @@ namespace obdelnik03wingui01 {
             void set_rows(int rows_)
             {
                 rows = rows_;
-                h = calc_length(rows);
+                h = calc_line_length(rows);
             }
 
             void set_cols(int cols_)
             {
                 cols = cols_;
-                w = calc_length(cols);
+                w = calc_line_length(cols);
             }
 
             void clear_rect(int x_, int y_, int w_, int h_)
@@ -88,7 +95,7 @@ namespace obdelnik03wingui01 {
                 delete myBrush;
             }
 
-            void clear_all_pic_box()
+            void clear_pic_box()
             {
                 clear_rect(0, 0, pic_box_w, pic_box_h);
             }
@@ -115,14 +122,14 @@ namespace obdelnik03wingui01 {
             }
 
             // draw small rectangle on position [row,col] in matrix
-            void draw_small_rect(int row, int col, Color color)
+            void draw_small_rect(const int row, const int col, const Color color)
             {
                 picBox->Image = picBox->Image;  // needed per tutor
-                int x = row*size_sq + 1;
-                int y = col*size_sq + 1;
+                int y = row*size_sq + 1;
+                int x = col*size_sq + 1;
                 int size = size_sq - 1;
                 SolidBrush^ myBrush = gcnew SolidBrush(color);
-                g->FillRectangle(myBrush, x, y, size, size);
+                g->FillRectangle(myBrush, x + offset_x, y + offset_y, size, size);
                 //g->FillRectangle(myBrush, rect);
                 delete myBrush;
             }
@@ -142,7 +149,22 @@ namespace obdelnik03wingui01 {
 
             void draw_matrix()
             {
-
+                try {
+                    if (M->is_valid()) {
+                        for (size_t i = 0; i < rows; i++) {
+                            for (size_t j = 0; j < cols; j++) {
+                                if (M->get_1(i, j)) { // free
+                                    draw_small_rect(i, j, free_color);
+                                } else {            // stone
+                                    draw_small_rect(i, j, stone_color);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (const std::exception& e) {
+                    // M->get_1() can throw excp. => don't draw matrix
+                }
             }
 
             void redraw_floor()
@@ -151,8 +173,25 @@ namespace obdelnik03wingui01 {
                 draw_floor();
             }
 
+            void set_full_mat_free()
+            {
+                M->init(rows, cols);
+                M->set_full_true();
+            }
 
-        };  // of class Pic_Box  ==========================================
+            void set_full_mat_occupied()
+            {
+                M->init(rows, cols);
+                M->set_full_false();
+            }
+
+            void set_mat_invalid()
+            {
+                M->set_invalid();
+            }
+
+
+        };  // of class Floor  === Floor === Floor === Floor === Floor === Floor 
 
 
 
@@ -248,20 +287,20 @@ namespace obdelnik03wingui01 {
                                                                        static_cast<System::Byte>(238)));
             this->lab_Size_height->Location = System::Drawing::Point(21, 21);
             this->lab_Size_height->Name = L"lab_Size_height";
-            this->lab_Size_height->Size = System::Drawing::Size(42, 13);
+            this->lab_Size_height->Size = System::Drawing::Size(33, 13);
             this->lab_Size_height->TabIndex = 0;
-            this->lab_Size_height->Text = L"height";
+            this->lab_Size_height->Text = L"rows";
             // 
             // lab_Size_width
             // 
             this->lab_Size_width->AutoSize = true;
             this->lab_Size_width->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
                                                                       static_cast<System::Byte>(238)));
-            this->lab_Size_width->Location = System::Drawing::Point(111, 21);
+            this->lab_Size_width->Location = System::Drawing::Point(99, 21);
             this->lab_Size_width->Name = L"lab_Size_width";
-            this->lab_Size_width->Size = System::Drawing::Size(37, 13);
+            this->lab_Size_width->Size = System::Drawing::Size(53, 13);
             this->lab_Size_width->TabIndex = 1;
-            this->lab_Size_width->Text = L"width";
+            this->lab_Size_width->Text = L"columns";
             // 
             // grp_Size
             // 
@@ -463,32 +502,30 @@ namespace obdelnik03wingui01 {
         // TODO:********** M.init(4, 5);
 
         Floor^ floor;
-        C_Matrix^ M = gcnew C_Matrix();
         //Graphics^ g;
 
         private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e)
         {
-
             int rows = Int32(this->num_Size_height->Value);
             int cols = Int32(this->num_Size_width->Value);
             int offset = DEFAULT_FLOOR_OFFSET;
-            floor = gcnew Floor(pictureBox1, rows, cols, offset, offset);
+            floor = gcnew Floor(pictureBox1, rows, cols, offset, offset,
+                                STONE_COLOR, FREE_COLOR);
 
-            //Color color = panel->BackColor;
-            //Color color = pictureBox1->BackColor;
-            //Color color = Color::White;
-            floor->clear_all_pic_box();
+            floor->clear_pic_box();
             floor->draw_floor();
         }
 
         private: System::Void height_Click(System::Object^  sender, System::EventArgs^  e)
         {
+            floor->set_mat_invalid();
             floor->clear_floor();
             floor->set_rows(Int32(this->num_Size_height->Value));
             floor->draw_floor();
         }
         private: System::Void width_Click(System::Object^  sender, System::EventArgs^  e)
         {
+            floor->set_mat_invalid();
             floor->clear_floor();
             floor->set_cols(Int32(this->num_Size_width->Value));
             floor->draw_floor();
@@ -500,7 +537,7 @@ namespace obdelnik03wingui01 {
                  //        e->Handled = true;
                  //}
 
-        private: System::Void minus10_Click(System::Object^  sender, System::EventArgs^  e)
+        private: System::Void minus10_Click(System::Object^ sender, System::EventArgs^  e)
         {
             Int32 val = Int32(this->num_Edit_percent->Value);
             if (val <= 10) {
@@ -511,7 +548,7 @@ namespace obdelnik03wingui01 {
             this->num_Edit_percent->Value = Decimal(val);
         }
 
-        private: System::Void plus10_Click(System::Object^  sender, System::EventArgs^  e)
+        private: System::Void plus10_Click(System::Object^ sender, System::EventArgs^  e)
         {
             Int32 val = Int32(this->num_Edit_percent->Value);
             if (val >= 90) {
@@ -522,14 +559,16 @@ namespace obdelnik03wingui01 {
             this->num_Edit_percent->Value = Decimal(val);
         }
 
-        private: System::Void but_FullEmpty_Click(System::Object^  sender, System::EventArgs^  e)
+        private: System::Void but_FullEmpty_Click(System::Object^ sender, System::EventArgs^  e)
         {
-            floor->draw_small_rect(2, 1, Color::White);
+            floor->set_full_mat_free();
+            floor->redraw_floor();
         }
 
-        private: System::Void but_FullBlack_Click(System::Object^  sender, System::EventArgs^  e)
+        private: System::Void but_FullBlack_Click(System::Object^ sender, System::EventArgs^  e)
         {
-            floor->clear_all_pic_box();
+            floor->set_full_mat_occupied();
+            floor->redraw_floor();
         }
 
     };  // of public ref class MyForm  ===============================

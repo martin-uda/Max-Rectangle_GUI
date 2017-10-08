@@ -1,5 +1,13 @@
 #pragma once
 
+#include <exception>
+class Excp_Invalid_Matrix : public std::exception 
+{
+    public:
+    //Excp_Invalid_Matrix(char const* const message) throw();
+    const char * what() const throw();
+};
+
 #include <vector>
 
 typedef std::vector<bool> T_BoolVector;
@@ -11,14 +19,19 @@ ref class C_Matrix
     T_BoolMatrix *a;
 
     C_Matrix();
-    void init(int width, int height);
+    void init(int height, int width);
+    void destroy();
     virtual ~C_Matrix();
+    bool is_valid();
+    void set_invalid();
 
     bool set_full_true();
     bool set_full_false();
     bool generate_random(int perct);
-    bool set_1(int x, int y, bool value);
-    
+    bool set_1(int y, int x, bool value);
+    bool get_1(int y, int x);
+    //std::tuple<bool, bool> get_1(int x, int y);
+
     private:
     int w;
     int h;

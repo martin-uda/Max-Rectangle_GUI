@@ -1,20 +1,30 @@
 #include "C_Matrix.h"
 
+// -- Exception def
+//Excp_Invalid_Matrix::Excp_Invalid_Matrix() {}
+
+const char * Excp_Invalid_Matrix::what() const throw()
+{
+    return "Matrix is not valid yet.";
+}
+// end of -- Exception def
+
 C_Matrix::C_Matrix()
 {
     w = 0;
     h = 0;
     valid = false;
-    a = new T_BoolMatrix;
-}
+} // of ctor C_Matrix(h,w)
 
-void C_Matrix::init(int width, int height)
+
+void C_Matrix::init(int height, int width)
 {
     w = width;
     h = height;
     valid = false;
+    a = new T_BoolMatrix;
 
-    for (int i = 0; i < h; i++) {
+    for (size_t i = 0; i < h; i++) {
         T_BoolVector myvec;
         for (size_t j = 0; j < w; j++) {
             myvec.push_back(false);
@@ -22,7 +32,25 @@ void C_Matrix::init(int width, int height)
         (*a).push_back(myvec);
     }
 
-} // of ctor C_Matrix(w,h)
+} // of init()
+
+void C_Matrix::destroy()
+{
+    valid = false;
+    delete a;
+} // of destroy()
+
+
+bool C_Matrix::is_valid()
+{
+    return valid;
+}
+
+void C_Matrix::set_invalid()
+{
+    valid = false;
+}
+
 
 C_Matrix::~C_Matrix()
 {
@@ -72,13 +100,31 @@ bool C_Matrix::generate_random(int perct)
 } // of generate_random()
 
 
-bool C_Matrix::set_1(int x, int y, bool value)
+bool C_Matrix::set_1(int y, int x, bool value)
 {
     if (!valid || h == 0 || w == 0) {
         return false;
     }
-    (*a)[x][y] = value;
+    (*a)[y][x] = value;
     return true;
 } // of set_1()
 
-//}; // of class C_Martix  ============================================
+bool C_Matrix::get_1(int y, int x)
+{
+    if (!valid || h == 0 || w == 0) {
+        Excp_Invalid_Matrix ex_invalid_matrix;
+        throw ex_invalid_matrix;
+    }
+    return (*a)[y][x];
+} // of get_1()
+
+//std::tuple<bool, bool> C_Matrix::get_1(int x, int y)
+//{
+//    if (!valid || h == 0 || w == 0) {
+//        return std::tuple(false, false);
+//    }
+//    (*a)[x][y] = value;
+//    return true;
+//} // of set_1()
+
+  //}; // of class C_Martix  ============================================
