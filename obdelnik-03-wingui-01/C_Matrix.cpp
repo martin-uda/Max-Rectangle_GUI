@@ -83,7 +83,7 @@ bool C_Matrix::set_full_false()
     return set_full_value(false);
 }
 
-bool C_Matrix::generate_random(int perct)
+bool C_Matrix::generate_random(float perct)
 {
     float f;
     if (h == 0 || w == 0) {
@@ -91,7 +91,7 @@ bool C_Matrix::generate_random(int perct)
     }
     for (size_t i = 0; i < h; i++) {
         for (size_t j = 0; j < w; j++) {
-            f = rand() / (RAND_MAX + 1.);
+            f = std::rand() / (RAND_MAX + 1.);
             (*a)[i][j] = (f < perct);
         }
     }

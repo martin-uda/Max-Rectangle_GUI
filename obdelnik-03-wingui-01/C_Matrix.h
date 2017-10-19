@@ -27,7 +27,7 @@ ref class C_Matrix
 
     bool set_full_true();
     bool set_full_false();
-    bool generate_random(int perct);
+    bool generate_random(float perct);
     bool set_1(int y, int x, bool value);
     bool get_1(int y, int x);
     //std::tuple<bool, bool> get_1(int x, int y);

@@ -68,9 +68,9 @@ namespace obdelnik03wingui01 {
             {
             }
 
-            int calc_line_length(int tiles)
+            int calc_line_length(int tiles_num)
             {
-                return tiles * size_sq;
+                return tiles_num * size_sq;
             }
 
             void set_rows(int rows_)
@@ -173,21 +173,27 @@ namespace obdelnik03wingui01 {
                 draw_floor();
             }
 
-            void set_full_mat_free()
+            void set_full_matrix_free()      // free => true
             {
                 M->init(rows, cols);
                 M->set_full_true();
             }
 
-            void set_full_mat_occupied()
+            void set_full_matrix_occupied()  // stone => false
             {
                 M->init(rows, cols);
                 M->set_full_false();
             }
 
-            void set_mat_invalid()
+            void set_matrix_invalid()
             {
                 M->set_invalid();
+            }
+
+            void set_matrix_random(float perct)
+            {
+                M->init(rows, cols);
+                M->generate_random(perct);
             }
 
 
@@ -406,6 +412,7 @@ namespace obdelnik03wingui01 {
             this->but_Edit_generate->TabIndex = 9;
             this->but_Edit_generate->Text = L"Generate";
             this->but_Edit_generate->UseVisualStyleBackColor = true;
+            this->but_Edit_generate->Click += gcnew System::EventHandler(this, &MyForm::but_Generate_Click);
             // 
             // but_Edit_minus10
             // 
@@ -518,14 +525,14 @@ namespace obdelnik03wingui01 {
 
         private: System::Void height_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            floor->set_mat_invalid();
+            floor->set_matrix_invalid();
             floor->clear_floor();
             floor->set_rows(Int32(this->num_Size_height->Value));
             floor->draw_floor();
         }
         private: System::Void width_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            floor->set_mat_invalid();
+            floor->set_matrix_invalid();
             floor->clear_floor();
             floor->set_cols(Int32(this->num_Size_width->Value));
             floor->draw_floor();
@@ -561,17 +568,23 @@ namespace obdelnik03wingui01 {
 
         private: System::Void but_FullEmpty_Click(System::Object^ sender, System::EventArgs^  e)
         {
-            floor->set_full_mat_free();
+            floor->set_full_matrix_free();
             floor->redraw_floor();
         }
 
         private: System::Void but_FullBlack_Click(System::Object^ sender, System::EventArgs^  e)
         {
-            floor->set_full_mat_occupied();
+            floor->set_full_matrix_occupied();
             floor->redraw_floor();
         }
 
-    };  // of public ref class MyForm  ===============================
+        private: System::Void but_Generate_Click(System::Object^  sender, System::EventArgs^  e)
+        {
+            Int32 val = Int32(this->num_Edit_percent->Value); 
+            floor->set_matrix_random(val/100.0);
+            floor->redraw_floor();
+        }
+};  // of public ref class MyForm  ===============================
 
 
 }  // of namespace obdelnik03wingui01
