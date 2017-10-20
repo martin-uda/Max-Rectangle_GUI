@@ -30,6 +30,7 @@ ref class C_Matrix
     bool generate_random(float perct);
     bool set_1(int y, int x, bool value);
     bool get_1(int y, int x);
+    bool negate_1(int y, int x);
     //std::tuple<bool, bool> get_1(int x, int y);
 
     private:

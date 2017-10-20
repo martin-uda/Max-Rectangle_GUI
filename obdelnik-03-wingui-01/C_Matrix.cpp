@@ -106,7 +106,7 @@ bool C_Matrix::set_1(int y, int x, bool value)
         return false;
     }
     (*a)[y][x] = value;
-    return true;
+    return value;
 } // of set_1()
 
 bool C_Matrix::get_1(int y, int x)
@@ -117,6 +117,11 @@ bool C_Matrix::get_1(int y, int x)
     }
     return (*a)[y][x];
 } // of get_1()
+
+bool C_Matrix::negate_1(int y, int x)
+{
+    return set_1(y, x, !get_1(y, x));
+}
 
 //std::tuple<bool, bool> C_Matrix::get_1(int x, int y)
 //{
