@@ -264,19 +264,45 @@ namespace obdelnik03wingui01 {
                 draw_result_rect(row, col, r.Us, r.Ls, color);
             }
 
-            void find_max_rectangle(Color color)
+            String^ str_max_rec(C_CheckMatrix::T_MaxRec r)  //i, j, Ls, Us
             {
+                String^ str_rect = "";
+                //str_rect += "pos: " + r.i + "," + r.j + "  size: " + r.Ls + " x " + r.Us + "\n";
+                str_rect = str_rect->Format("pos: {0,3:D},{1,3:D}  size: {2,3:D} x{3,3:D}",
+                                            r.i-r.Us+1, r.j-r.Ls+1, r.Ls, r.Us);
+                return str_rect;
+            }
+
+            String^ get_str_max_rec()
+            {
+                String^ str = "";
+                if (pCM->get_max_size() <= 0) {
+                    return "no rectangle found";
+                }
+
+                C_CheckMatrix::T_MaxRecVec max_rec_vec = pCM->get_max_rect_vec();
+                C_CheckMatrix::T_MaxRecVec::const_iterator r;  // pointer
+
+                for (r = max_rec_vec.begin(); r != max_rec_vec.end(); ++r) {
+                    str += str_max_rec(*r) + "\n";
+                }
+                return str;
+            }
+
+            C_CheckMatrix::T_MaxRecVec find_max_rectangle(Color color)
+            {
+                //String^ rectangles_text;
                 C_CheckMatrix::T_MaxRecVec max_rec_vec = pCM->find_max_rectangle(M);
 
-                C_CheckMatrix::T_MaxRecVec::const_iterator max_rec;
+                C_CheckMatrix::T_MaxRecVec::const_iterator max_rec;  // pointer
 
                 for (max_rec = max_rec_vec.begin(); max_rec != max_rec_vec.end(); ++max_rec) {
                     draw_max_rec(*max_rec, color);
                 }
 
-                //for (size_t i = 0; i < length; i++) {
-
-                //}
+                //rectangles_text = "a\na\na\na\na\na\na\na\na\na\na\na\nbbbb";
+                //return rectangles_text;
+                return max_rec_vec;
             }
 
         };  // of class Floor  === Floor === Floor === Floor === Floor === Floor 
@@ -331,6 +357,18 @@ namespace obdelnik03wingui01 {
         private: System::Windows::Forms::GroupBox^  grp_Find;
         private: System::Windows::Forms::Button^  but_Find_start;
         private: System::Windows::Forms::Label^  lab_Find_max_rect;
+        private: System::Windows::Forms::GroupBox^  grp_Result;
+        private: System::Windows::Forms::Label^  lab_Result_size;
+
+        private: System::Windows::Forms::Label^  lab_Result_maxRect;
+        private: System::Windows::Forms::Label^  lab_Result_rects;
+        private: System::Windows::Forms::Panel^  panel_Result_out;
+        private: System::Windows::Forms::Panel^  panel_Result_in;
+
+
+
+
+
 
         private:
         /// <summary>
@@ -366,6 +404,12 @@ namespace obdelnik03wingui01 {
             this->grp_Find = (gcnew System::Windows::Forms::GroupBox());
             this->but_Find_start = (gcnew System::Windows::Forms::Button());
             this->lab_Find_max_rect = (gcnew System::Windows::Forms::Label());
+            this->grp_Result = (gcnew System::Windows::Forms::GroupBox());
+            this->panel_Result_out = (gcnew System::Windows::Forms::Panel());
+            this->panel_Result_in = (gcnew System::Windows::Forms::Panel());
+            this->lab_Result_rects = (gcnew System::Windows::Forms::Label());
+            this->lab_Result_size = (gcnew System::Windows::Forms::Label());
+            this->lab_Result_maxRect = (gcnew System::Windows::Forms::Label());
             this->grp_Size->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->num_Size_width))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->num_Size_height))->BeginInit();
@@ -373,6 +417,9 @@ namespace obdelnik03wingui01 {
             this->grp_Edit->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->num_Edit_percent))->BeginInit();
             this->grp_Find->SuspendLayout();
+            this->grp_Result->SuspendLayout();
+            this->panel_Result_out->SuspendLayout();
+            this->panel_Result_in->SuspendLayout();
             this->SuspendLayout();
             // 
             // lab_Size_height
@@ -575,9 +622,9 @@ namespace obdelnik03wingui01 {
             // 
             this->grp_Find->Controls->Add(this->but_Find_start);
             this->grp_Find->Controls->Add(this->lab_Find_max_rect);
-            this->grp_Find->Location = System::Drawing::Point(12, 383);
+            this->grp_Find->Location = System::Drawing::Point(12, 373);
             this->grp_Find->Name = L"grp_Find";
-            this->grp_Find->Size = System::Drawing::Size(285, 85);
+            this->grp_Find->Size = System::Drawing::Size(285, 41);
             this->grp_Find->TabIndex = 6;
             this->grp_Find->TabStop = false;
             this->grp_Find->Text = L"Find";
@@ -588,7 +635,7 @@ namespace obdelnik03wingui01 {
             this->but_Find_start->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                                                                       static_cast<System::Byte>(238)));
             this->but_Find_start->ForeColor = System::Drawing::Color::Green;
-            this->but_Find_start->Location = System::Drawing::Point(124, 22);
+            this->but_Find_start->Location = System::Drawing::Point(124, 11);
             this->but_Find_start->Name = L"but_Find_start";
             this->but_Find_start->Size = System::Drawing::Size(75, 23);
             this->but_Find_start->TabIndex = 1;
@@ -600,17 +647,76 @@ namespace obdelnik03wingui01 {
             // lab_Find_max_rect
             // 
             this->lab_Find_max_rect->AutoSize = true;
-            this->lab_Find_max_rect->Location = System::Drawing::Point(6, 27);
+            this->lab_Find_max_rect->Location = System::Drawing::Point(6, 16);
             this->lab_Find_max_rect->Name = L"lab_Find_max_rect";
             this->lab_Find_max_rect->Size = System::Drawing::Size(96, 13);
             this->lab_Find_max_rect->TabIndex = 0;
             this->lab_Find_max_rect->Text = L"Find max. rectanle:";
             // 
+            // grp_Result
+            // 
+            this->grp_Result->Controls->Add(this->panel_Result_out);
+            this->grp_Result->Controls->Add(this->lab_Result_size);
+            this->grp_Result->Controls->Add(this->lab_Result_maxRect);
+            this->grp_Result->Location = System::Drawing::Point(12, 420);
+            this->grp_Result->Name = L"grp_Result";
+            this->grp_Result->Size = System::Drawing::Size(285, 177);
+            this->grp_Result->TabIndex = 7;
+            this->grp_Result->TabStop = false;
+            this->grp_Result->Text = L"Result";
+            // 
+            // panel_Result_out
+            // 
+            this->panel_Result_out->Controls->Add(this->panel_Result_in);
+            this->panel_Result_out->Location = System::Drawing::Point(6, 32);
+            this->panel_Result_out->Name = L"panel_Result_out";
+            this->panel_Result_out->Size = System::Drawing::Size(273, 139);
+            this->panel_Result_out->TabIndex = 3;
+            // 
+            // panel_Result_in
+            // 
+            this->panel_Result_in->AutoScroll = true;
+            this->panel_Result_in->Controls->Add(this->lab_Result_rects);
+            this->panel_Result_in->Location = System::Drawing::Point(5, 3);
+            this->panel_Result_in->Name = L"panel_Result_in";
+            this->panel_Result_in->Size = System::Drawing::Size(263, 131);
+            this->panel_Result_in->TabIndex = 3;
+            // 
+            // lab_Result_rects
+            // 
+            this->lab_Result_rects->AutoSize = true;
+            this->lab_Result_rects->Font = (gcnew System::Drawing::Font(L"Consolas", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                                                                        static_cast<System::Byte>(238)));
+            this->lab_Result_rects->Location = System::Drawing::Point(3, 3);
+            this->lab_Result_rects->Name = L"lab_Result_rects";
+            this->lab_Result_rects->Size = System::Drawing::Size(103, 13);
+            this->lab_Result_rects->TabIndex = 2;
+            this->lab_Result_rects->Text = L"results: not yet";
+            // 
+            // lab_Result_size
+            // 
+            this->lab_Result_size->AutoSize = true;
+            this->lab_Result_size->Location = System::Drawing::Point(125, 16);
+            this->lab_Result_size->Name = L"lab_Result_size";
+            this->lab_Result_size->Size = System::Drawing::Size(13, 13);
+            this->lab_Result_size->TabIndex = 1;
+            this->lab_Result_size->Text = L"0";
+            // 
+            // lab_Result_maxRect
+            // 
+            this->lab_Result_maxRect->AutoSize = true;
+            this->lab_Result_maxRect->Location = System::Drawing::Point(6, 16);
+            this->lab_Result_maxRect->Name = L"lab_Result_maxRect";
+            this->lab_Result_maxRect->Size = System::Drawing::Size(107, 13);
+            this->lab_Result_maxRect->TabIndex = 0;
+            this->lab_Result_maxRect->Text = L"Max. rectangle - size:";
+            // 
             // MyForm
             // 
             this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
             this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-            this->ClientSize = System::Drawing::Size(306, 521);
+            this->ClientSize = System::Drawing::Size(306, 609);
+            this->Controls->Add(this->grp_Result);
             this->Controls->Add(this->grp_Find);
             this->Controls->Add(this->grp_Edit);
             this->Controls->Add(this->pictureBox1);
@@ -628,6 +734,11 @@ namespace obdelnik03wingui01 {
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->num_Edit_percent))->EndInit();
             this->grp_Find->ResumeLayout(false);
             this->grp_Find->PerformLayout();
+            this->grp_Result->ResumeLayout(false);
+            this->grp_Result->PerformLayout();
+            this->panel_Result_out->ResumeLayout(false);
+            this->panel_Result_in->ResumeLayout(false);
+            this->panel_Result_in->PerformLayout();
             this->ResumeLayout(false);
 
         }
@@ -720,7 +831,6 @@ namespace obdelnik03wingui01 {
         private: System::Void pic1_MouseClick(System::Object^  sender,
                                               System::Windows::Forms::MouseEventArgs^  ms)
         {
-            //MouseEventArgs ^ms = (MouseEventArgs^)e;
             int X = ms->X;
             int Y = ms->Y;
             if (floor->is_in_floor(X, Y)) {
@@ -738,13 +848,18 @@ namespace obdelnik03wingui01 {
                 but_start->Font = gcnew System::Drawing::Font(but_start->Font->Name,
                                                               but_start->Font->Size, FontStyle::Regular);
             }
-
         }
 
         private: System::Void but_Start_Click(System::Object^  sender, System::EventArgs^  e)
         {
             //floor->draw_result_rect(1, 0, 2, 4, Color::ForestGreen);
-            floor->find_max_rectangle(Color::SkyBlue);
+            String^ rectangles_text = "";
+            C_CheckMatrix::T_MaxRecVec max_rec_vec;
+
+            max_rec_vec = floor->find_max_rectangle(Color::SkyBlue);
+            rectangles_text = floor->get_str_max_rec();
+            this->lab_Result_size->Text = Int32(max_rec_vec[0].size).ToString();
+            this->lab_Result_rects->Text = rectangles_text;
         }
 
     };  // of public ref class MyForm  ===============================

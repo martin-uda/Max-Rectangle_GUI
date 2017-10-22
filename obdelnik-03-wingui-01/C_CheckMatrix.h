@@ -15,11 +15,12 @@ class C_CheckMatrix
     } T_MaxRec;
     typedef std::vector<T_MaxRec> T_MaxRecVec;
 
+    int get_max_size();
     T_MaxRecVec find_max_rectangle(C_Matrix ^M);
+    T_MaxRecVec get_max_rect_vec();
 
-    //int get_max_size();
 
-    private:
+    private:  // v v v v v v v v v v v v v 
     int mainMax;
 
     struct T_Graph {
@@ -32,7 +33,7 @@ class C_CheckMatrix
     typedef std::vector<T_GraphVector> T_GraphMatrix;
 
     T_MaxRecVec mainMax_arr;
-    T_GraphMatrix G;               // matrix of pointers to graph
+    T_GraphMatrix G;         // matrix of pointers to graph
     int w;   // size for G
     int h;
 

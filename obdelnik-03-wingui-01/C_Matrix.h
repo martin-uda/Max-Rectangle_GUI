@@ -35,7 +35,7 @@ ref class C_Matrix
     bool negate_1(int y, int x);
     //std::tuple<bool, bool> get_1(int x, int y);
 
-    private:
+    private:  // v v v v v v v v v v v v v 
     int w;
     int h;
     bool valid;

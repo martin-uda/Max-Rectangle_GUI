@@ -24,6 +24,15 @@ C_CheckMatrix::~C_CheckMatrix()
     // new_graph_node() creates new T_Graph
 }
 
+int C_CheckMatrix::get_max_size()
+{
+    return mainMax;
+}
+
+C_CheckMatrix::T_MaxRecVec C_CheckMatrix::get_max_rect_vec()
+{
+    return mainMax_arr;
+}
 
 void C_CheckMatrix::initialize_G(int w1, int h1)  // set G to nullptrs
 {
