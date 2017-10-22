@@ -22,6 +22,8 @@ ref class C_Matrix
     void init(int height, int width);
     void destroy();
     virtual ~C_Matrix();
+    int get_h();
+    int get_w();
     bool is_valid();
     void set_invalid();
 

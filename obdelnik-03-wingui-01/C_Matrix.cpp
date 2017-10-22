@@ -41,6 +41,16 @@ void C_Matrix::destroy()
 } // of destroy()
 
 
+int C_Matrix::get_h()
+{
+    return h;
+}
+
+int C_Matrix::get_w()
+{
+    return w;
+}
+
 bool C_Matrix::is_valid()
 {
     return valid;
@@ -91,7 +101,7 @@ bool C_Matrix::generate_random(float perct)
     }
     for (size_t i = 0; i < h; i++) {
         for (size_t j = 0; j < w; j++) {
-            f = std::rand() / (RAND_MAX + 1.);
+            f = std::rand() / (RAND_MAX + 1.F);
             (*a)[i][j] = (f < perct);
         }
     }
@@ -123,13 +133,4 @@ bool C_Matrix::negate_1(int y, int x)
     return set_1(y, x, !get_1(y, x));
 }
 
-//std::tuple<bool, bool> C_Matrix::get_1(int x, int y)
-//{
-//    if (!valid || h == 0 || w == 0) {
-//        return std::tuple(false, false);
-//    }
-//    (*a)[x][y] = value;
-//    return true;
-//} // of set_1()
-
-  //}; // of class C_Martix  ============================================
+// of class C_Martix  ============================================

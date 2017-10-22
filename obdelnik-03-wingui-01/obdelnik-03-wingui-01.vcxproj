@@ -134,10 +134,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="C_CheckMatrix.cpp" />
     <ClCompile Include="C_Matrix.cpp" />
     <ClCompile Include="MyForm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="C_CheckMatrix.h" />
     <ClInclude Include="C_Matrix.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>

@@ -242,3 +242,5 @@ ModelManifest.xml
 .fake/
 /obdelnik-03-wingui-01/C_Matrix2.h
 /obdelnik-03-wingui-01/C_Matrix2.cpp
+/obdelnik-03-wingui-01/C_CheckMatrix.cpp
+/obdelnik-03-wingui-01/C_CheckMatrix.h

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "C_Matrix.h"
+#include "C_CheckMatrix.h"
 
 #define DEFAULT_FLOOR_OFFSET 10
 #define DEFAULT_FLOOR_OFFSET_X DEFAULT_FLOOR_OFFSET
@@ -42,6 +43,7 @@ namespace obdelnik03wingui01 {
             int pic_box_h, pic_box_w;  // size of picBox
 
             C_Matrix^ M = gcnew C_Matrix();
+            C_CheckMatrix *pCM = new C_CheckMatrix();
 
             public:
             Floor(PictureBox^ picBox_, int rows_, int cols_, int off_x, int off_y,
@@ -177,6 +179,23 @@ namespace obdelnik03wingui01 {
                 }
             }
 
+            void draw_result_rect(const int row, const int col,
+                                  int size_row, int size_col, const Color color)
+            {
+                picBox->Image = picBox->Image;  // needed per tutor
+                int y = row*size_sq + 2;
+                int x = col*size_sq + 2;
+                int size_y = size_row * size_sq - 4;
+                int size_x = size_col * size_sq - 4;
+                float width = 3.0;
+                //SolidBrush^ myBrush = gcnew SolidBrush(color);
+                Pen^ myPen = gcnew Pen(color, width);
+                g->DrawRectangle(myPen, x + offset_x, y + offset_y, size_x, size_y);
+                //g->FillRectangle(myBrush, rect);
+                //delete myBrush;
+                delete myPen;
+            }
+
             void draw_floor()
             {
                 for (Int32 i = 0; i <= cols; i++) {
@@ -235,6 +254,30 @@ namespace obdelnik03wingui01 {
                 M->generate_random(perct);
             }
 
+            // === C_CheckMatrix part
+
+            void draw_max_rec(C_CheckMatrix::T_MaxRec r, Color color)  //i, j, Ls, Us
+            {
+                int row, col;
+                col = r.j - r.Ls + 1;
+                row = r.i - r.Us + 1;
+                draw_result_rect(row, col, r.Us, r.Ls, color);
+            }
+
+            void find_max_rectangle(Color color)
+            {
+                C_CheckMatrix::T_MaxRecVec max_rec_vec = pCM->find_max_rectangle(M);
+
+                C_CheckMatrix::T_MaxRecVec::const_iterator max_rec;
+
+                for (max_rec = max_rec_vec.begin(); max_rec != max_rec_vec.end(); ++max_rec) {
+                    draw_max_rec(*max_rec, color);
+                }
+
+                //for (size_t i = 0; i < length; i++) {
+
+                //}
+            }
 
         };  // of class Floor  === Floor === Floor === Floor === Floor === Floor 
 
@@ -684,6 +727,7 @@ namespace obdelnik03wingui01 {
                 floor->find_and_invert(X, Y);
             }
         }
+
         private: System::Void but_Find_start_change(System::Object^  sender, System::EventArgs^  e)
         {
             Button^ but_start = this->but_Find_start;
@@ -699,10 +743,10 @@ namespace obdelnik03wingui01 {
 
         private: System::Void but_Start_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            floor->set_full_matrix_free();
-            this->but_Find_start->Enabled = true;
-            floor->redraw_floor();
+            //floor->draw_result_rect(1, 0, 2, 4, Color::ForestGreen);
+            floor->find_max_rectangle(Color::SkyBlue);
         }
+
     };  // of public ref class MyForm  ===============================
 
 
