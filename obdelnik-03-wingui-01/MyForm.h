@@ -33,8 +33,8 @@ namespace obdelnik03wingui01 {
         {
             Int32 SMALL_RECT_SIZE = 10;
 
-            int h, w;		// Height and width of floor in px
-            int rows, cols;   // height and width of floor in tile
+            int h, w;		    // Height and width of floor in px
+            int rows, cols;     // height and width of floor in tile
             int size_sq;
             int perct;      // 
             Color stone_color;
@@ -77,6 +77,19 @@ namespace obdelnik03wingui01 {
                 g = Graphics::FromImage(picBox->Image);
             }
 
+            int calc_max_tiles_in_pic(int len, int offset)
+            {
+                return (len - 2 * offset) / size_sq;
+            }
+
+            void set_max_floor()
+            {
+                int cols_ = calc_max_tiles_in_pic(pic_box_w, offset_x);
+                int rows_ = calc_max_tiles_in_pic(pic_box_h, offset_y);
+                set_cols(cols_);
+                set_rows(rows_);
+            }
+
             int calc_line_length(int tiles_num)
             {
                 return tiles_num * size_sq;
@@ -92,6 +105,16 @@ namespace obdelnik03wingui01 {
             {
                 cols = cols_;
                 w = calc_line_length(cols);
+            }
+
+            int get_rows()
+            {
+                return rows;
+            }
+
+            int get_cols()
+            {
+                return cols;
             }
 
             void clear_rect(int x_, int y_, int w_, int h_)
@@ -252,17 +275,17 @@ namespace obdelnik03wingui01 {
 
                 // left border : DirectionRightToLeft
                 StringFormat^ format = gcnew StringFormat(StringFormatFlags::DirectionRightToLeft);
-                str = (rows > 1) ? Int32(rows - 1).ToString() : "";
+                str = (rows > 1) ? Int32(rows).ToString() : "";
                 x = offset_x;
                 y = offset_y;
-                g->DrawString("0", drawFont, myBrush, x, y, format);
+                g->DrawString("1", drawFont, myBrush, x, y, format);
                 g->DrawString(str, drawFont, myBrush, x, y + h - (FONT_SIZE + 4), format);
 
                 // top border, no format
-                str = (cols > 1) ? Int32(cols - 1).ToString() : "";
+                str = (cols > 1) ? Int32(cols).ToString() : "";
                 x = offset_x;
                 y = offset_y - (FONT_SIZE + 4);
-                g->DrawString("0", drawFont, myBrush, x, y);
+                g->DrawString("1", drawFont, myBrush, x, y);
                 g->DrawString(str, drawFont, myBrush, x + w - (FONT_SIZE + 4), y);
 
                 delete drawFont;
@@ -320,7 +343,7 @@ namespace obdelnik03wingui01 {
                 String^ str_rect = "";
                 //str_rect += "pos: " + r.i + "," + r.j + "  size: " + r.Ls + " x " + r.Us + "\n";
                 str_rect = str_rect->Format("pos: {0,3:D},{1,3:D}  size: {2,3:D} x{3,3:D}",
-                                            r.j - r.Ls + 1, r.i - r.Us + 1, r.Ls, r.Us);
+                                            r.j - r.Ls + 2, r.i - r.Us + 2, r.Ls, r.Us);
                 return str_rect;
             }
 
@@ -408,6 +431,7 @@ namespace obdelnik03wingui01 {
         private: System::Windows::Forms::Button^  but_Edit_minus10;
         private: System::Windows::Forms::GroupBox^  grp_Find;
         private: System::Windows::Forms::Button^  but_Find_start;
+        private: System::Windows::Forms::Button^  but_Find_start9;
         private: System::Windows::Forms::Label^  lab_Find_max_rect;
         private: System::Windows::Forms::GroupBox^  grp_Result;
         private: System::Windows::Forms::Label^  lab_Result_size;
@@ -463,6 +487,7 @@ namespace obdelnik03wingui01 {
             this->lab_Edit_random = (gcnew System::Windows::Forms::Label());
             this->lab_Edit_manually = (gcnew System::Windows::Forms::Label());
             this->grp_Find = (gcnew System::Windows::Forms::GroupBox());
+            this->but_Find_start9 = (gcnew System::Windows::Forms::Button());
             this->but_Find_clear = (gcnew System::Windows::Forms::Button());
             this->but_Find_start = (gcnew System::Windows::Forms::Button());
             this->lab_Find_max_rect = (gcnew System::Windows::Forms::Label());
@@ -537,7 +562,7 @@ namespace obdelnik03wingui01 {
             // num_Size_width
             // 
             this->num_Size_width->Location = System::Drawing::Point(102, 37);
-            this->num_Size_width->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 30, 0, 0, 0 });
+            this->num_Size_width->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 300, 0, 0, 0 });
             this->num_Size_width->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
             this->num_Size_width->Name = L"num_Size_width";
             this->num_Size_width->Size = System::Drawing::Size(71, 20);
@@ -549,7 +574,7 @@ namespace obdelnik03wingui01 {
             // num_Size_height
             // 
             this->num_Size_height->Location = System::Drawing::Point(10, 37);
-            this->num_Size_height->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 20, 0, 0, 0 });
+            this->num_Size_height->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 200, 0, 0, 0 });
             this->num_Size_height->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
             this->num_Size_height->Name = L"num_Size_height";
             this->num_Size_height->Size = System::Drawing::Size(68, 20);
@@ -589,7 +614,7 @@ namespace obdelnik03wingui01 {
             this->grp_Pic1->Location = System::Drawing::Point(5, 76);
             this->grp_Pic1->MinimumSize = System::Drawing::Size(300, 0);
             this->grp_Pic1->Name = L"grp_Pic1";
-            this->grp_Pic1->Size = System::Drawing::Size(300, 193);
+            this->grp_Pic1->Size = System::Drawing::Size(350, 193);
             this->grp_Pic1->TabIndex = 3;
             this->grp_Pic1->TabStop = false;
             this->grp_Pic1->Text = L"Matrix";
@@ -602,7 +627,7 @@ namespace obdelnik03wingui01 {
             this->pic_Pic1->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
             this->pic_Pic1->Location = System::Drawing::Point(3, 16);
             this->pic_Pic1->Name = L"pic_Pic1";
-            this->pic_Pic1->Size = System::Drawing::Size(294, 174);
+            this->pic_Pic1->Size = System::Drawing::Size(344, 174);
             this->pic_Pic1->TabIndex = 4;
             this->pic_Pic1->TabStop = false;
             this->pic_Pic1->SizeChanged += gcnew System::EventHandler(this, &MyForm::pic_box_Resize);
@@ -719,22 +744,36 @@ namespace obdelnik03wingui01 {
             // 
             // grp_Find
             // 
+            this->grp_Find->Controls->Add(this->but_Find_start9);
             this->grp_Find->Controls->Add(this->but_Find_clear);
             this->grp_Find->Controls->Add(this->but_Find_start);
             this->grp_Find->Controls->Add(this->lab_Find_max_rect);
             this->grp_Find->Dock = System::Windows::Forms::DockStyle::Bottom;
             this->grp_Find->Location = System::Drawing::Point(5, 362);
-            this->grp_Find->MaximumSize = System::Drawing::Size(300, 40);
+            this->grp_Find->MaximumSize = System::Drawing::Size(350, 40);
             this->grp_Find->MinimumSize = System::Drawing::Size(300, 40);
             this->grp_Find->Name = L"grp_Find";
-            this->grp_Find->Size = System::Drawing::Size(300, 40);
+            this->grp_Find->Size = System::Drawing::Size(350, 40);
             this->grp_Find->TabIndex = 20;
             this->grp_Find->TabStop = false;
             this->grp_Find->Text = L"Find";
             // 
+            // but_Find_start9
+            // 
+            this->but_Find_start9->Enabled = false;
+            this->but_Find_start9->ForeColor = System::Drawing::Color::RoyalBlue;
+            this->but_Find_start9->Location = System::Drawing::Point(189, 11);
+            this->but_Find_start9->Name = L"but_Find_start9";
+            this->but_Find_start9->Size = System::Drawing::Size(65, 23);
+            this->but_Find_start9->TabIndex = 23;
+            this->but_Find_start9->Text = L"Start Best";
+            this->but_Find_start9->UseVisualStyleBackColor = true;
+            this->but_Find_start9->EnabledChanged += gcnew System::EventHandler(this, &MyForm::but_Find_start9_change);
+            this->but_Find_start9->Click += gcnew System::EventHandler(this, &MyForm::but_Start9_Click);
+            // 
             // but_Find_clear
             // 
-            this->but_Find_clear->Location = System::Drawing::Point(189, 11);
+            this->but_Find_clear->Location = System::Drawing::Point(279, 11);
             this->but_Find_clear->Name = L"but_Find_clear";
             this->but_Find_clear->Size = System::Drawing::Size(65, 23);
             this->but_Find_clear->TabIndex = 22;
@@ -775,7 +814,7 @@ namespace obdelnik03wingui01 {
             this->grp_Result->Location = System::Drawing::Point(5, 402);
             this->grp_Result->MinimumSize = System::Drawing::Size(300, 180);
             this->grp_Result->Name = L"grp_Result";
-            this->grp_Result->Size = System::Drawing::Size(300, 180);
+            this->grp_Result->Size = System::Drawing::Size(350, 180);
             this->grp_Result->TabIndex = 7;
             this->grp_Result->TabStop = false;
             this->grp_Result->Text = L"Result";
@@ -830,7 +869,7 @@ namespace obdelnik03wingui01 {
             // 
             this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
             this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-            this->ClientSize = System::Drawing::Size(310, 587);
+            this->ClientSize = System::Drawing::Size(360, 587);
             this->Controls->Add(this->grp_Pic1);
             this->Controls->Add(this->grp_Edit);
             this->Controls->Add(this->grp_Find);
@@ -883,6 +922,7 @@ namespace obdelnik03wingui01 {
         {
             floor->set_matrix_invalid();
             this->but_Find_start->Enabled = false;
+            this->but_Find_start9->Enabled = false;
             floor->clear_pic_box();
             floor->set_rows(Int32(this->num_Size_height->Value));
             floor->draw_pic_box();
@@ -891,6 +931,7 @@ namespace obdelnik03wingui01 {
         {
             floor->set_matrix_invalid();
             this->but_Find_start->Enabled = false;
+            this->but_Find_start9->Enabled = false;
             floor->clear_pic_box();
             floor->set_cols(Int32(this->num_Size_width->Value));
             floor->draw_pic_box();
@@ -902,17 +943,31 @@ namespace obdelnik03wingui01 {
                  //        e->Handled = true;
                  //}
 
+
         private: System::Void but_MaxSize_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            this->num_Size_height->Value = this->num_Size_height->Maximum;
-            this->num_Size_width->Value = this->num_Size_width->Maximum;
+            //floor->clear_pic_box();
             floor->set_matrix_invalid();
+            floor->set_max_floor();
+            this->num_Size_height->Value = min(this->num_Size_height->Maximum, floor->get_rows());
+            this->num_Size_width->Value = min(this->num_Size_width->Maximum, floor->get_cols());
             this->but_Find_start->Enabled = false;
-            floor->clear_pic_box();
-            floor->set_rows(Int32(this->num_Size_height->Value));
-            floor->set_cols(Int32(this->num_Size_width->Value));
-            floor->draw_pic_box();
+            this->but_Find_start9->Enabled = false;
+            //floor->draw_pic_box();
+            floor->redraw_pic_box();
         }
+
+                 //private: System::Void but_MaxSize_Click(System::Object^  sender, System::EventArgs^  e)
+                 //{
+                 //    this->num_Size_height->Value = this->num_Size_height->Maximum;
+                 //    this->num_Size_width->Value = this->num_Size_width->Maximum;
+                 //    floor->set_matrix_invalid();
+                 //    this->but_Find_start->Enabled = false;
+                 //    floor->clear_pic_box();
+                 //    floor->set_rows(Int32(this->num_Size_height->Value));
+                 //    floor->set_cols(Int32(this->num_Size_width->Value));
+                 //    floor->draw_pic_box();
+                 //}
 
         private: System::Void minus10_Click(System::Object^ sender, System::EventArgs^  e)
         {
@@ -940,6 +995,7 @@ namespace obdelnik03wingui01 {
         {
             floor->set_full_matrix_free();
             this->but_Find_start->Enabled = true;
+            this->but_Find_start9->Enabled = true;
             floor->redraw_floor();
         }
 
@@ -947,6 +1003,7 @@ namespace obdelnik03wingui01 {
         {
             floor->set_full_matrix_occupied();
             this->but_Find_start->Enabled = true;
+            this->but_Find_start9->Enabled = true;
             floor->redraw_floor();
         }
 
@@ -955,6 +1012,7 @@ namespace obdelnik03wingui01 {
             Int32 val = Int32(this->num_Edit_percent->Value);
             floor->set_matrix_random(val / 100.0);
             this->but_Find_start->Enabled = true;
+            this->but_Find_start9->Enabled = true;
             floor->redraw_floor();
         }
         private: System::Void pic1_MouseClick(System::Object^  sender,
@@ -967,9 +1025,8 @@ namespace obdelnik03wingui01 {
             }
         }
 
-        private: System::Void but_Find_start_change(System::Object^  sender, System::EventArgs^  e)
+        private: System::Void but_Find_change(Button^ but_start)
         {
-            Button^ but_start = this->but_Find_start;
             if (but_start->Enabled) {
                 but_start->Font = gcnew System::Drawing::Font(but_start->Font->Name,
                                                               but_start->Font->Size, FontStyle::Bold);
@@ -977,6 +1034,18 @@ namespace obdelnik03wingui01 {
                 but_start->Font = gcnew System::Drawing::Font(but_start->Font->Name,
                                                               but_start->Font->Size, FontStyle::Regular);
             }
+        }
+
+        private: System::Void but_Find_start_change(System::Object^  sender, System::EventArgs^  e)
+        {
+            Button^ but_start = this->but_Find_start;
+            but_Find_change(but_start);
+        }
+
+        private: System::Void but_Find_start9_change(System::Object^  sender, System::EventArgs^  e)
+        {
+            Button^ but_start = this->but_Find_start9;
+            but_Find_change(but_start);
         }
 
         private: System::Void but_Start_Click(System::Object^  sender, System::EventArgs^  e)
@@ -989,6 +1058,14 @@ namespace obdelnik03wingui01 {
             rectangles_text = floor->get_str_max_rec();
             this->lab_Result_size->Text = Int32(max_rec_vec[0].size).ToString();
             this->lab_Result_rects->Text = rectangles_text;
+        }
+
+        private: System::Void but_Start9_Click(System::Object^  sender, System::EventArgs^  e)
+        {
+            floor->set_full_matrix_free();
+            this->but_Find_start->Enabled = true;
+            this->but_Find_start9->Enabled = true;
+            floor->redraw_floor();
         }
 
         private: System::Void but_Clear_Click(System::Object^  sender, System::EventArgs^  e)
