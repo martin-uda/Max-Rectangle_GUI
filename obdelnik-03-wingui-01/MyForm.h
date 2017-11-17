@@ -46,6 +46,7 @@ namespace obdelnik03wingui01 {
 
             C_Matrix^ M = gcnew C_Matrix();
             C_CheckMatrix *pCM = new C_CheckMatrix();
+            C_CheckWithHist *pCH = new C_CheckWithHist();
 
             public:
             Floor(PictureBox^ picBox_, int rows_, int cols_, int off_x, int off_y,
@@ -66,6 +67,17 @@ namespace obdelnik03wingui01 {
             ~Floor()
             {
             }
+
+            C_BaseCheckMatrix* get_pCM()
+            {
+                return pCM;
+            }
+
+            C_BaseCheckMatrix* get_pCH()
+            {
+                return pCH;
+            }
+
 
             void init_picBox(PictureBox^ picBox_)
             {
@@ -330,32 +342,36 @@ namespace obdelnik03wingui01 {
 
             // === C_CheckMatrix part
 
-            void draw_max_rec(C_CheckMatrix::T_MaxRec r, Color color)  //i, j, Ls, Us
+            void draw_max_rec(T_MaxRec r, Color color)  //i, j, Ls, Us
             {
                 int row, col;
-                col = r.j - r.Ls + 1;
-                row = r.i - r.Us + 1;
+                //col = r.j - r.Ls + 1;
+                //row = r.i - r.Us + 1;
+                col = r.i;
+                row = r.j;
                 draw_result_rect(row, col, r.Us, r.Ls, color);
             }
 
-            String^ str_max_rec(C_CheckMatrix::T_MaxRec r)  //i, j, Ls, Us
+            String^ str_max_rec(T_MaxRec r)  //i, j, Ls, Us
             {
                 String^ str_rect = "";
                 //str_rect += "pos: " + r.i + "," + r.j + "  size: " + r.Ls + " x " + r.Us + "\n";
+                //str_rect = str_rect->Format("pos: {0,3:D},{1,3:D}  size: {2,3:D} x{3,3:D}",
+                //                            r.j - r.Ls + 2, r.i - r.Us + 2, r.Ls, r.Us);
                 str_rect = str_rect->Format("pos: {0,3:D},{1,3:D}  size: {2,3:D} x{3,3:D}",
-                                            r.j - r.Ls + 2, r.i - r.Us + 2, r.Ls, r.Us);
+                                            r.i + 1, r.j + 1, r.Ls, r.Us);
                 return str_rect;
             }
 
-            String^ get_str_max_rec()
+            String^ get_str_max_rec(C_BaseCheckMatrix* pCM)
             {
                 String^ str = "";
                 if (pCM->get_max_size() <= 0) {
                     return "no rectangle found";
                 }
 
-                C_CheckMatrix::T_MaxRecVec max_rec_vec = pCM->get_max_rect_vec();
-                C_CheckMatrix::T_MaxRecVec::const_iterator r;  // pointer
+                T_MaxRecVec max_rec_vec = pCM->get_max_rect_vec();
+                T_MaxRecVec::const_iterator r;  // pointer
 
                 for (r = max_rec_vec.begin(); r != max_rec_vec.end(); ++r) {
                     str += str_max_rec(*r) + "\n";
@@ -363,12 +379,16 @@ namespace obdelnik03wingui01 {
                 return str;
             }
 
-            C_CheckMatrix::T_MaxRecVec find_max_rectangle(Color color)
+			T_MaxRecVec find_max_rectangle_in_hist(T_Histogram h) {
+				return pCH->find_max_rectangle_in_hist(h);
+			}
+
+            T_MaxRecVec find_max_rectangle(C_BaseCheckMatrix* pCM, Color color)
             {
                 //String^ rectangles_text;
-                C_CheckMatrix::T_MaxRecVec max_rec_vec = pCM->find_max_rectangle(M);
+                T_MaxRecVec max_rec_vec = pCM->find_max_rectangle(M);
 
-                C_CheckMatrix::T_MaxRecVec::const_iterator max_rec;  // pointer
+                T_MaxRecVec::const_iterator max_rec;  // pointer
 
                 for (max_rec = max_rec_vec.begin(); max_rec != max_rec_vec.end(); ++max_rec) {
                     draw_max_rec(*max_rec, color);
@@ -378,6 +398,12 @@ namespace obdelnik03wingui01 {
                 //return rectangles_text;
                 return max_rec_vec;
             }
+
+            //T_MaxRecVec dummy_with_hist(T_Histogram hist)
+            //{
+            //    T_MaxRecVec max_rec_vec = pCH->find_max_rectangle_in_hist(hist);
+            //    return max_rec_vec;
+            //}
 
         };  // of class Floor  === Floor === Floor === Floor === Floor === Floor 
 
@@ -1052,20 +1078,32 @@ namespace obdelnik03wingui01 {
         {
             //floor->draw_result_rect(1, 0, 2, 4, Color::ForestGreen);
             String^ rectangles_text = "";
-            C_CheckMatrix::T_MaxRecVec max_rec_vec;
+            T_MaxRecVec max_rec_vec;
 
-            max_rec_vec = floor->find_max_rectangle(Color::SkyBlue);
-            rectangles_text = floor->get_str_max_rec();
+            max_rec_vec = floor->find_max_rectangle(floor->get_pCM(), Color::SkyBlue);
+            rectangles_text = floor->get_str_max_rec(floor->get_pCM());
             this->lab_Result_size->Text = Int32(max_rec_vec[0].size).ToString();
             this->lab_Result_rects->Text = rectangles_text;
         }
 
         private: System::Void but_Start9_Click(System::Object^  sender, System::EventArgs^  e)
         {
-            floor->set_full_matrix_free();
-            this->but_Find_start->Enabled = true;
-            this->but_Find_start9->Enabled = true;
-            floor->redraw_floor();
+            //floor->set_full_matrix_free();
+            //this->but_Find_start->Enabled = true;
+            //this->but_Find_start9->Enabled = true;
+            //floor->redraw_floor();
+            
+            String^ rectangles_text = "";
+            T_MaxRecVec max_rec_vec;
+
+			//T_Histogram h = { 10,0,0,2,10,5,10,6,6,10,10,0,7,3,10 };
+			//T_Histogram h = { 4,3,2,1 };
+			//max_rec_vec = floor->find_max_rectangle_in_hist(h);
+
+            max_rec_vec = floor->find_max_rectangle(floor->get_pCH(), Color::SkyBlue);
+            rectangles_text = floor->get_str_max_rec(floor->get_pCH());
+            this->lab_Result_size->Text = Int32(max_rec_vec[0].size).ToString();
+            this->lab_Result_rects->Text = rectangles_text;
         }
 
         private: System::Void but_Clear_Click(System::Object^  sender, System::EventArgs^  e)
