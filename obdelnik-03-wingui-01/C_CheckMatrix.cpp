@@ -283,30 +283,24 @@ void C_CheckWithHist::max_rect_in_histogram(T_Histogram x, int y, int N)
 }  // max_rect_in_histogram()
 
 
-void C_CheckWithHist::build_histogram(C_Matrix ^M, int N, int row, T_Histogram &h0)
-{
-	T_Histogram h1;
-
-	std::string s1 = str_hist(h0);
-
-	s1 = str_hist(h1);
-
-	for (int j = 0; j < N; j++) {
-		if ((*(M->a))[row][j]) {
-			h1.push_back(h0[j] + 1);
-		}
-		else {
-			h1.push_back(0);
-		}
-	}
-
-	s1 = str_hist(h1);
-
-	h0 = h1;
-
-	s1 = str_hist(h0);
-
-}
+//void C_CheckWithHist::build_histogram(C_Matrix ^M, int N, int row, T_Histogram &h0)
+//{
+//	T_Histogram h1;
+//	std::string s1 = str_hist(h0);
+//	s1 = str_hist(h1);
+//
+//	for (int j = 0; j < N; j++) {
+//		if ((*(M->a))[row][j]) {
+//			h1.push_back(h0[j] + 1);
+//		}
+//		else {
+//			h1.push_back(0);
+//		}
+//	}
+//	s1 = str_hist(h1);
+//	h0 = h1;
+//	s1 = str_hist(h0);
+//}
 
 
 T_MaxRecVec C_CheckWithHist::find_max_rectangle(C_Matrix ^M)
@@ -319,18 +313,22 @@ T_MaxRecVec C_CheckWithHist::find_max_rectangle(C_Matrix ^M)
 	T_Histogram h0(cols, 0);
 	//T_Histogram h0 = { 0,0,0,0 };
 
-	std::string s1 = str_hist(h0);
+	//std::string s1 = str_hist(h0);
 
 	for (int row = 0; row < rows; row++) {
-		s1 = str_hist(h0);
-
-		build_histogram(M, N, row, h0);
-		s1 = str_hist(h0);
-
+		//s1 = str_hist(h0);
+		//build_histogram(M, N, row, h0);
+		for (int j = 0; j < N; j++) {
+			if ((*(M->a))[row][j]) {
+				h0[j] += 1;
+			}
+			else {
+				h0[j] = 0;
+			}
+		}
+		//s1 = str_hist(h0);
 		max_rect_in_histogram(h0, row, N);
 	}
-
-
 	return mainMax_arr;
 }
 
