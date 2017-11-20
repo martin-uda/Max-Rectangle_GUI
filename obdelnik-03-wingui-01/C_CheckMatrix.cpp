@@ -232,7 +232,6 @@ void C_CheckWithHist::new_max(int size, int col, int row, int col_w, int row_h)
 		mainMax_arr.clear();
 	}
 	mainMax_arr.push_back({ col, row - row_h + 1, col_w, row_h, size });
-	//mainMax_arr.push_back({ j - u.Ls + 1, i - u.Us + 1, u.Ls, u.Us, u.size });
 }
 
 void C_CheckWithHist::max_rect_in_histogram(T_Histogram x, int y, int N)
@@ -265,7 +264,7 @@ void C_CheckWithHist::max_rect_in_histogram(T_Histogram x, int y, int N)
 			if (size >= mainMax) {
 				new_max(size, last.i, y, w, last.h);
 			}
-			if (xi > 0  && stack_last.top().h < xi) {
+			if (xi > 0 && stack_last.top().h < xi) {
 				last.h = xi;
 			}
 			else {
@@ -281,26 +280,6 @@ void C_CheckWithHist::max_rect_in_histogram(T_Histogram x, int y, int N)
 		}
 	}
 }  // max_rect_in_histogram()
-
-
-//void C_CheckWithHist::build_histogram(C_Matrix ^M, int N, int row, T_Histogram &h0)
-//{
-//	T_Histogram h1;
-//	std::string s1 = str_hist(h0);
-//	s1 = str_hist(h1);
-//
-//	for (int j = 0; j < N; j++) {
-//		if ((*(M->a))[row][j]) {
-//			h1.push_back(h0[j] + 1);
-//		}
-//		else {
-//			h1.push_back(0);
-//		}
-//	}
-//	s1 = str_hist(h1);
-//	h0 = h1;
-//	s1 = str_hist(h0);
-//}
 
 
 T_MaxRecVec C_CheckWithHist::find_max_rectangle(C_Matrix ^M)
@@ -332,6 +311,125 @@ T_MaxRecVec C_CheckWithHist::find_max_rectangle(C_Matrix ^M)
 	return mainMax_arr;
 }
 
-
-
 // end of class C_CheckWithHist  ============================================
+
+
+
+// begin of class C_CheckWithHist_FromWeb  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+// This code is based on http://www.geeksforgeeks.org/largest-rectangle-under-histogram/
+// I made couple of changes: 
+// 1) to use boolean matrix instead of 1/0.
+// 2) to use vector for array
+// 3) to have {row,col, row-size,col-size} for max rectangle to be able to draw the result(s)
+
+
+C_CheckWithHist_FromWeb::C_CheckWithHist_FromWeb()
+{
+	init();
+}
+
+void C_CheckWithHist_FromWeb::init()
+{
+	mainMax = 0;
+	mainMax_arr.clear();
+	mainMax_arr.push_back({ -1, -1, 0, 0, 0 });  // int i, j, Ls, Us, size;
+} // end of construltor C_CheckWithHist_FromWeb
+
+C_CheckWithHist_FromWeb::~C_CheckWithHist_FromWeb()
+{
+}
+
+void C_CheckWithHist_FromWeb::new_max(int size, int col, int row, int col_w, int row_h)
+{
+	if (size > mainMax) {          // create new max
+		mainMax = size;
+		mainMax_arr.clear();
+	}
+	mainMax_arr.push_back({ col, row - row_h + 1, col_w, row_h, size });
+}
+
+
+void C_CheckWithHist_FromWeb::max_rect_in_histogram(T_Histogram hist, int y, int N) {
+	// Create an empty stack. The stack holds indexes of hist[] array
+	// The bars stored in stack are always in increasing order of their
+	// heights.
+	std::stack<int> s;
+
+	// it's this.mainMax in my code
+	//int max_area = 0; // Initalize max area
+	int tp;   // To store top of stack
+	int area; // To store area with top bar as the smallest bar
+	int w;    // width of rectangle            // my var. due to new_max()
+
+	// Run through all bars of given histogram
+	int i = 0;
+	while (i < N)
+	{
+		// If this bar is higher than the bar on top stack, push it to stack
+		if (s.empty() || hist[s.top()] <= hist[i])
+			s.push(i++);
+
+		// If this bar is lower than top of stack, then calculate area of rectangle 
+		// with stack top as the smallest (or minimum height) bar. 'i' is 
+		// 'right index' for the top and element before top in stack is 'left index'
+		else
+		{
+			tp = s.top();  // store the top index
+			s.pop();  // pop the top
+
+			// Calculate the area with hist[tp] stack as smallest bar
+			w = (s.empty() ? i : i - s.top() - 1);
+			area = hist[tp] * w;
+
+			// update max area, if needed
+			if (area >= mainMax) {
+				new_max(area, i - w, y, w, hist[tp]);
+			}
+		}
+	}
+
+	// Now pop the remaining bars from stack and calculate area with every
+	// popped bar as the smallest bar
+	while (s.empty() == false)
+	{
+		tp = s.top();
+		s.pop();
+		w = (s.empty() ? i : i - s.top() - 1);
+		area = hist[tp] * w;
+
+		if (area >= mainMax) {
+			new_max(area, i - w, y, w, hist[tp]);
+		}
+	}
+}  // of max_rect_in_histogram()
+
+
+T_MaxRecVec C_CheckWithHist_FromWeb::find_max_rectangle(C_Matrix ^M) {
+	// Returns area of the largest rectangle with all 1s in A[][]
+	// Calculate area for first row and initialize it as result
+
+	init();
+	const int rows = M->get_h();
+	const int cols = M->get_w();
+	const int N = cols;
+
+	T_Histogram h0(cols, 0);
+
+	// iterate over row to find maximum rectangular area
+	// considering each row as histogram
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < N; j++) {
+			if ((*(M->a))[i][j]) {
+				h0[j] += 1;
+			}
+			else {
+				h0[j] = 0;
+			}
+		}
+		max_rect_in_histogram(h0, i, N);
+	}
+	return mainMax_arr;
+} // of find_max_rectangle()
+
+// end of class C_CheckWithHist_FromWeb  ========================================
